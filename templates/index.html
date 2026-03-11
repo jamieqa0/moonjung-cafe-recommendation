@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="recommend-form">
+    <h2>어떤 카페를 찾으세요?</h2>
+    <form action="/recommend" method="post">
+        <label for="mood">분위기</label>
+        <select name="mood" id="mood">
+            <option value="">상관없음</option>
+            <option value="조용한">조용한</option>
+            <option value="아늑한">아늑한</option>
+            <option value="모던한">모던한</option>
+            <option value="활기찬">활기찬</option>
+            <option value="편안한">편안한</option>
+        </select>
+
+        <label for="purpose">목적</label>
+        <select name="purpose" id="purpose">
+            <option value="">상관없음</option>
+            <option value="작업">작업</option>
+            <option value="대화">대화</option>
+            <option value="디저트">디저트</option>
+            <option value="데이트">데이트</option>
+            <option value="커피">커피</option>
+        </select>
+
+        <label for="price_range">가격대</label>
+        <select name="price_range" id="price_range">
+            <option value="">상관없음</option>
+            <option value="저가">저가</option>
+            <option value="중가">중가</option>
+            <option value="고가">고가</option>
+        </select>
+
+        <button type="submit">추천받기</button>
+    </form>
+</section>
+{% endblock %}

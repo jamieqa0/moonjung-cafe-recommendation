@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}추천 결과 - 문정동 카페 추천{% endblock %}
+
+{% block content %}
+<section class="results">
+    <h2>추천 카페 ({{ cafes|length }}곳)</h2>
+    {% if cafes %}
+    <div class="cafe-list">
+        {% for cafe in cafes %}
+        <article class="cafe-card">
+            <h3>{{ cafe.name }}</h3>
+            <p class="address">{{ cafe.address }}</p>
+            <p class="description">{{ cafe.description }}</p>
+            <p><strong>대표 메뉴:</strong> {{ cafe.signature_menu }}</p>
+            <p><strong>가격대:</strong> {{ cafe.price_range }} · <strong>평점:</strong> {{ cafe.rating }}</p>
+            <div class="tags">
+                {% for tag in cafe.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>조건에 맞는 카페가 없습니다.</p>
+    {% endif %}
+    <a href="/" class="back-link">다시 추천받기</a>
+</section>
+{% endblock %}
