@@ -1,4 +1,3 @@
-좋아요 👍
 **Python + 웹 + TDD + Claude Code** 조합이면 진행 순서를 잘 잡는 게 중요합니다.
 Claude Code(Claude Notebook)를 쓸 때 **가장 효율적인 워크플로우**를 단계별로 정리해 드릴게요.
 
