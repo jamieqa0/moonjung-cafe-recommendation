@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+<section class="welcome">
+    <p class="welcome-message">어서 와, 우주에서 온 친구.</p>
+    <p class="welcome-sub">아직 만난 적 없는 친구에게 보내는 빵집 가이드</p>
+</section>
+
 <section class="recommend-form">
-    <h2>어떤 베이커리를 찾으세요?</h2>
+    <h2>어떤 빵집을 찾고 있나요?</h2>
+    <p class="form-hint">잘 모르겠으면 안 골라도 괜찮아요. 우리가 맛있는 곳을 찾아줄게요.</p>
     <form action="/recommend" method="post">
         <label for="mood">분위기</label>
         <select name="mood" id="mood">
-            <option value="">상관없음</option>
+            <option value="">잘 모르겠어요</option>
             <option value="아늑한">아늑한</option>
             <option value="모던한">모던한</option>
             <option value="빈티지한">빈티지한</option>
@@ -16,7 +22,7 @@
 
         <label for="purpose">목적</label>
         <select name="purpose" id="purpose">
-            <option value="">상관없음</option>
+            <option value="">잘 모르겠어요</option>
             <option value="브런치">브런치</option>
             <option value="선물">선물</option>
             <option value="모임">모임</option>
@@ -26,13 +32,66 @@
 
         <label for="price_range">가격대</label>
         <select name="price_range" id="price_range">
-            <option value="">상관없음</option>
+            <option value="">잘 모르겠어요</option>
             <option value="저가">저가</option>
             <option value="중가">중가</option>
             <option value="고가">고가</option>
         </select>
 
-        <button type="submit">추천받기</button>
+        <label for="max_distance">문정역에서 거리</label>
+        <select name="max_distance" id="max_distance">
+            <option value="">상관없어요</option>
+            <option value="0.3">가까운 곳만 (300m 이내)</option>
+            <option value="0.5">걸어갈 수 있는 곳 (500m 이내)</option>
+            <option value="1.0">조금 걸어도 괜찮아요 (1km 이내)</option>
+            <option value="2.0">멀어도 괜찮아요 (2km 이내)</option>
+        </select>
+
+        <div class="checkbox-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="parking" id="parking">
+                <span>주차 가능한 곳</span>
+                <span class="checkbox-hint">이동 기계(자동차)를 세울 공간이 필요해요</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" name="custom_order" id="custom_order">
+                <span>주문 제작 가능한 곳</span>
+                <span class="checkbox-hint">원하는 모양과 맛으로 빵을 맞춤 생산해줘요</span>
+            </label>
+        </div>
+
+        <button type="submit">내 빵집 찾기</button>
     </form>
+    <a href="/sensory" class="sensory-link">말로 설명하기 어렵다면? 감각으로 찾기</a>
+</section>
+
+<section class="earth-guide">
+    <details>
+        <summary>지구 음식 가이드 — 처음이라 어려우시죠?</summary>
+        <div class="guide-content">
+            <h3>빵(Bread)이란?</h3>
+            <p>밀가루에 물과 효모를 섞어 부풀린 뒤 높은 열로 구운 음식이에요. 겉은 바삭하고 안은 부드럽답니다. 처음 먹으면 놀랄 수 있어요 — 그건 정상이에요.</p>
+
+            <h3>베이커리(Bakery)란?</h3>
+            <p>빵을 전문적으로 만들어 파는 가게예요. 안에서 먹거나, 포장해서 가져갈 수 있어요.</p>
+
+            <h3>분위기가 뭔가요?</h3>
+            <ul>
+                <li><strong>아늑한</strong> — 체온이 0.3도 올라가는 느낌의 따뜻한 공간</li>
+                <li><strong>모던한</strong> — 직선과 깔끔한 디자인. 차갑지만 세련된 곳</li>
+                <li><strong>빈티지한</strong> — 과거 시대의 물건이 가득한 공간 (시간 왜곡은 아니에요)</li>
+                <li><strong>감성적인</strong> — 꽃, 조명, 색감이 감정을 자극하는 곳</li>
+                <li><strong>편안한</strong> — 긴장이 풀리는 환경. 소파가 있을 수도 있어요</li>
+            </ul>
+
+            <h3>가격대는 뭔가요?</h3>
+            <p>지구인은 "원(KRW)"이라는 화폐로 빵을 사요.</p>
+            <ul>
+                <li><strong>저가</strong> — 부담 없는 가격. 매일 와도 괜찮아요</li>
+                <li><strong>중가</strong> — 대부분의 지구인이 편안하게 느끼는 범위</li>
+                <li><strong>고가</strong> — 특별한 날에 어울리는 가격</li>
+            </ul>
+        </div>
+    </details>
 </section>
 {% endblock %}

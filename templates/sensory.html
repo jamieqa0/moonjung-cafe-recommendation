@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}감각으로 찾기 - 문정동 빵 안내소{% endblock %}
+
+{% block content %}
+<section class="welcome">
+    <p class="welcome-message">감각으로 찾기</p>
+    <p class="welcome-sub">말로 설명하기 어렵다면, 느낌으로 찾아보세요.</p>
+</section>
+
+<section class="sensory-form">
+    <form action="/sensory" method="post">
+        <fieldset class="sensory-question">
+            <legend>1. 어떤 식감이 좋아요?</legend>
+            <label class="sensory-option">
+                <input type="radio" name="texture" value="바삭" checked>
+                <span class="sensory-label">바삭</span>
+                <span class="sensory-desc">씹으면 부서지는 느낌. 크루아상, 바게트처럼.</span>
+            </label>
+            <label class="sensory-option">
+                <input type="radio" name="texture" value="부드러움">
+                <span class="sensory-label">부드러움</span>
+                <span class="sensory-desc">입안에서 사르르 녹는 느낌. 케이크, 식빵처럼.</span>
+            </label>
+        </fieldset>
+
+        <fieldset class="sensory-question">
+            <legend>2. 어떤 맛이 끌려요?</legend>
+            <label class="sensory-option">
+                <input type="radio" name="taste" value="달콤" checked>
+                <span class="sensory-label">달콤</span>
+                <span class="sensory-desc">설탕, 크림, 과일의 단맛. 행복해지는 맛.</span>
+            </label>
+            <label class="sensory-option">
+                <input type="radio" name="taste" value="고소">
+                <span class="sensory-label">고소</span>
+                <span class="sensory-desc">버터, 곡물, 치즈의 깊은 맛. 든든해지는 맛.</span>
+            </label>
+        </fieldset>
+
+        <fieldset class="sensory-question">
+            <legend>3. 누구와 함께?</legend>
+            <label class="sensory-option">
+                <input type="radio" name="atmosphere" value="혼자" checked>
+                <span class="sensory-label">혼자 조용히</span>
+                <span class="sensory-desc">나만의 시간. 조용하고 아늑한 공간.</span>
+            </label>
+            <label class="sensory-option">
+                <input type="radio" name="atmosphere" value="여럿">
+                <span class="sensory-label">여럿이 함께</span>
+                <span class="sensory-desc">친구, 가족, 동료와 함께하는 시간.</span>
+            </label>
+        </fieldset>
+
+        <button type="submit">내 빵집 찾기</button>
+    </form>
+    <a href="/" class="back-link">조건으로 직접 고르기</a>
+</section>
+{% endblock %}
