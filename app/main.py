@@ -18,7 +18,7 @@ from app.sensory import map_sensory_to_conditions
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-app = FastAPI(title="문정동 빵 안내소")
+app = FastAPI(title="MoonBBang Station")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 

@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 문정동 베이커리 추천 웹 서비스. Python FastAPI 기반, TDD(pytest) 개발 방식.
 리뷰 텍스트에서 키워드를 추출해 베이커리 특징 태그를 자동 생성하고, 분위기·목적·가격대·주차·주문제작·거리 조건으로 베이커리를 추천한다.
 
-- **GitHub**: https://github.com/jamieqa0/moonjung-bakery-recommendation
+- **GitHub**: https://github.com/jamieqa0/moonbbang-station
 
 ## 개발 명령어
 

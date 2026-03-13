@@ -16,7 +16,7 @@
 
 ## 링크
 
-- **GitHub**: https://github.com/jamieqa0/moonjung-bakery-recommendation
+- **GitHub**: https://github.com/jamieqa0/moonbbang-station
 
 ## 실행 명령어
 
