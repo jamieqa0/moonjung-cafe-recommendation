@@ -32,6 +32,16 @@ html {
     scroll-behavior: smooth;
 }
 
+#tsparticles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
 body {
     font-family: var(--sans);
     background: var(--cream);
@@ -51,14 +61,74 @@ a:hover {
     color: var(--amber);
 }
 
+/* ===== Space Icons ===== */
+.header-icon {
+    width: 28px;
+    height: 28px;
+    vertical-align: -5px;
+    margin-right: 6px;
+}
+
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: -3px;
+    margin-right: 4px;
+}
+
+.label-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: -4px;
+    margin-right: 5px;
+}
+
+.chip-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: -3px;
+}
+
+.btn-icon {
+    width: 22px;
+    height: 22px;
+    vertical-align: -5px;
+    margin-right: 6px;
+}
+
+.link-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: -3px;
+    margin-right: 4px;
+}
+
+.heading-icon {
+    width: 28px;
+    height: 28px;
+    vertical-align: -5px;
+    margin-right: 8px;
+}
+
+.legend-icon {
+    width: 22px;
+    height: 22px;
+    vertical-align: -4px;
+    margin-right: 6px;
+}
+
 /* ===== Layout ===== */
 .container {
+    position: relative;
+    z-index: 1;
     max-width: 860px;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
-body:has(.results-layout) .container {
+body:has(.results-layout) .container,
+body:has(.intro-layout) .container,
+body:has(.sensory-layout) .container {
     max-width: 1200px;
 }
 
@@ -131,6 +201,148 @@ header nav a:hover {
 
 header nav a:hover::after {
     width: 100%;
+}
+
+/* ===== Intro 2-Column Layout (좌: 소갯말 / 우: 튜토리얼+폼) ===== */
+.intro-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.intro-left {
+    position: sticky;
+    top: 1.5rem;
+    max-width: 280px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.intro-right {
+    min-width: 0;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.intro-right .recommend-form {
+    margin-top: 2rem;
+}
+
+.intro-welcome {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.intro-welcome-icon {
+    display: block;
+    margin: 0 auto 1.2rem;
+    width: 90px;
+    height: 90px;
+    opacity: 0.85;
+}
+
+.intro-welcome-title {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 1rem;
+}
+
+.intro-welcome-body {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    line-height: 1.8;
+}
+
+.intro-welcome-body p {
+    margin-bottom: 0.8rem;
+}
+
+.intro-welcome-body p:last-child {
+    margin-bottom: 0;
+    color: var(--crust);
+    font-weight: 600;
+    font-style: normal;
+}
+
+.intro-guide {
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.intro-guide details {
+    background: var(--card-bg);
+    padding: 1.2rem 1.8rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.intro-guide summary {
+    font-family: var(--serif);
+    color: var(--crust);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.intro-guide summary::-webkit-details-marker {
+    display: none;
+}
+
+.intro-guide summary::before {
+    content: '\25B6';
+    font-size: 0.6rem;
+    color: var(--amber);
+    transition: transform var(--transition);
+}
+
+.intro-guide details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.intro-guide .guide-content {
+    margin-top: 1.2rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+    font-size: 0.88rem;
+    font-weight: 300;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.intro-guide .guide-content h3 {
+    font-family: var(--serif);
+    color: var(--crust);
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.intro-guide .guide-content ul {
+    margin-left: 1.2rem;
+    margin-top: 0.4rem;
+}
+
+.intro-guide .guide-content li {
+    margin-bottom: 0.3rem;
+}
+
+.intro-guide .guide-content strong {
+    font-weight: 500;
+    color: var(--ink);
 }
 
 /* ===== Hero Section ===== */
@@ -214,77 +426,6 @@ header nav a:hover::after {
     border: none;
 }
 
-/* ===== Earth Guide ===== */
-.earth-guide {
-    margin-bottom: 1.5rem;
-}
-
-.earth-guide details {
-    background: var(--card-bg);
-    padding: 1.2rem 1.8rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-}
-
-.earth-guide summary {
-    font-family: var(--serif);
-    color: var(--crust);
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-    letter-spacing: 0.02em;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.earth-guide summary::-webkit-details-marker {
-    display: none;
-}
-
-.earth-guide summary::before {
-    content: '\25B6';
-    font-size: 0.6rem;
-    color: var(--amber);
-    transition: transform var(--transition);
-}
-
-.earth-guide details[open] summary::before {
-    transform: rotate(90deg);
-}
-
-.earth-guide .guide-content {
-    margin-top: 1.2rem;
-    color: var(--ink-light);
-    line-height: 1.8;
-    font-size: 0.88rem;
-    font-weight: 300;
-}
-
-.earth-guide .guide-content h3 {
-    font-family: var(--serif);
-    color: var(--crust);
-    margin-top: 1.2rem;
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.earth-guide .guide-content ul {
-    margin-left: 1.2rem;
-    margin-top: 0.4rem;
-}
-
-.earth-guide .guide-content li {
-    margin-bottom: 0.3rem;
-}
-
-.earth-guide .guide-content strong {
-    font-weight: 500;
-    color: var(--ink);
-}
-
 /* ===== Recommend Form ===== */
 .recommend-form {
     background: var(--card-bg);
@@ -360,10 +501,7 @@ header nav a:hover::after {
     border-color: var(--ink);
 }
 
-.chip-icon {
-    font-size: 1rem;
-    line-height: 1;
-}
+/* chip-icon styles moved to Space Icons section */
 
 /* Distance select (keep as dropdown) */
 .select-group-label {
@@ -511,6 +649,28 @@ header nav a:hover::after {
     color: var(--amber);
 }
 
+/* ===== Sensory 2-Column Layout ===== */
+.sensory-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.sensory-left {
+    position: sticky;
+    top: 1.5rem;
+    max-width: 280px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.sensory-right {
+    min-width: 0;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
 /* ===== Sensory Form ===== */
 .sensory-form {
     background: var(--card-bg);
@@ -532,6 +692,9 @@ header nav a:hover::after {
     border: none;
     margin-top: 2.2rem;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .sensory-question:first-of-type {
@@ -544,6 +707,7 @@ header nav a:hover::after {
     color: var(--ink);
     font-size: 1.02rem;
     margin-bottom: 0.8rem;
+    flex: 0 0 100%;
 }
 
 .sensory-option {
@@ -551,11 +715,13 @@ header nav a:hover::after {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.6rem;
-    margin: 0.5rem 0;
+    flex: 1;
+    min-width: 250px;
+    margin: 0;
     padding: 1.1rem 1.3rem;
     background: var(--cream);
-    border: 1.5px solid transparent;
-    border-radius: 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 400;
     transition: all var(--transition);
@@ -580,7 +746,7 @@ header nav a:hover::after {
     justify-content: center;
     width: 20px;
     height: 20px;
-    border: 1.5px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: 50%;
     flex-shrink: 0;
     transition: all var(--transition);
@@ -618,7 +784,7 @@ header nav a:hover::after {
     font-weight: 300;
 }
 
-/* ===== Results Layout (2-column) ===== */
+/* ===== Results Layout (top / left / right) ===== */
 .results {
     padding-bottom: 2rem;
 }
@@ -628,18 +794,40 @@ header nav a:hover::after {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--ink);
-    margin-bottom: 2rem;
+    margin-bottom: 0.3rem;
     letter-spacing: -0.01em;
 }
 
 .results-layout {
     display: grid;
+    grid-template-areas:
+        "top   top"
+        "left  right";
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
     gap: 2rem;
     align-items: start;
 }
 
-.results-map-col {
+.results-top {
+    grid-area: top;
+    text-align: center;
+    padding: 1.5rem 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.results-summary {
+    font-family: var(--sans);
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin-top: 0.3rem;
+}
+
+.results-left {
+    grid-area: left;
     position: sticky;
     top: 1.5rem;
 }
@@ -651,7 +839,8 @@ header nav a:hover::after {
     border-radius: 4px;
 }
 
-.results-cards-col {
+.results-right {
+    grid-area: right;
     min-width: 0;
 }
 
@@ -914,10 +1103,6 @@ footer {
     animation: fadeInUp 0.8s ease-out;
 }
 
-.earth-guide {
-    animation: fadeInUp 0.8s ease-out 0.1s both;
-}
-
 .recommend-form,
 .sensory-form {
     animation: fadeInUp 0.8s ease-out 0.2s both;
@@ -949,11 +1134,35 @@ footer {
 
 /* ===== Responsive ===== */
 @media (max-width: 860px) {
-    .results-layout {
+    .intro-layout {
         grid-template-columns: 1fr;
     }
 
-    .results-map-col {
+    .intro-left {
+        position: static;
+    }
+
+    .sensory-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sensory-left {
+        position: static;
+    }
+
+    .intro-guide .guide-content {
+        max-height: none;
+    }
+
+    .results-layout {
+        grid-template-areas:
+            "top"
+            "left"
+            "right";
+        grid-template-columns: 1fr;
+    }
+
+    .results-left {
         position: static;
     }
 

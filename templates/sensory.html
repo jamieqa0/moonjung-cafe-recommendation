@@ -3,64 +3,82 @@
 {% block title %}감각으로 찾기 - MoonBBang Station{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <p class="hero-title">내 안의 빵 레이더 켜기</p>
-    <p class="hero-sub">말로 설명하기 귀찮다면? 본능이 이끄는 대로 골라봐요!</p>
-    <hr class="hero-divider">
-</section>
+<div class="sensory-layout">
+    <!-- 좌측: 소갯말 -->
+    <div class="sensory-left">
+        <div class="intro-welcome">
+            <img src="/static/hero-alien.svg" alt="빵을 든 우주 여행자" class="intro-welcome-icon">
+            <p class="intro-welcome-title">"내 안의 빵 레이더 켜기"</p>
+            <div class="intro-welcome-body">
+                <p>
+                    말로 설명하기 귀찮다면?<br>
+                    본능이 이끄는 대로 골라봐요!
+                </p>
+                <p>
+                    세 가지 질문에 답하면<br>
+                    당신의 감각이 빵집을 찾아줍니다.
+                </p>
+            </div>
+        </div>
+    </div>
 
-<section class="sensory-form">
-    <form action="/sensory" method="post">
-        <fieldset class="sensory-question">
-            <legend>1. 지금 입 안에서 원하고 있는 식감은?</legend>
-            <label class="sensory-option">
-                <input type="radio" name="texture" value="바삭" checked>
-                <span class="sensory-check"></span>
-                <span class="sensory-label">바삭바삭</span>
-                <span class="sensory-desc">씹을 때 나는 경쾌한 소리! 크루아상, 페이스트리 재질</span>
-            </label>
-            <label class="sensory-option">
-                <input type="radio" name="texture" value="부드러움">
-                <span class="sensory-check"></span>
-                <span class="sensory-label">사르르 촉촉</span>
-                <span class="sensory-desc">솜사탕처럼 녹아내리는 부드러움. 식빵, 케이크 재질</span>
-            </label>
-        </fieldset>
+    <!-- 우측: 감각 폼 -->
+    <div class="sensory-right">
+        <section class="sensory-form">
+            <h2>감각으로 찾기</h2>
+            <form action="/sensory" method="post">
+                <fieldset class="sensory-question">
+                    <legend><img src="/static/icons/bread.svg" alt="" class="legend-icon">1. 지금 입 안에서 원하고 있는 식감은?</legend>
+                    <label class="sensory-option">
+                        <input type="radio" name="texture" value="바삭" checked>
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">바삭바삭</span>
+                        <span class="sensory-desc">씹을 때 나는 경쾌한 소리! 크루아상, 페이스트리 재질</span>
+                    </label>
+                    <label class="sensory-option">
+                        <input type="radio" name="texture" value="부드러움">
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">사르르 촉촉</span>
+                        <span class="sensory-desc">솜사탕처럼 녹아내리는 부드러움. 식빵, 케이크 재질</span>
+                    </label>
+                </fieldset>
 
-        <fieldset class="sensory-question">
-            <legend>2. 기분 전환을 위한 맛의 방향은?</legend>
-            <label class="sensory-option">
-                <input type="radio" name="taste" value="달콤" checked>
-                <span class="sensory-check"></span>
-                <span class="sensory-label">당 충전 100%</span>
-                <span class="sensory-desc">설탕, 크림, 초콜릿... 무조건 달달하고 행복해지는 맛!</span>
-            </label>
-            <label class="sensory-option">
-                <input type="radio" name="taste" value="고소">
-                <span class="sensory-check"></span>
-                <span class="sensory-label">은은한 고소함</span>
-                <span class="sensory-desc">버터의 풍미, 씹을수록 올라오는 곡물의 든든한 맛!</span>
-            </label>
-        </fieldset>
+                <fieldset class="sensory-question">
+                    <legend><img src="/static/icons/moon.svg" alt="" class="legend-icon">2. 기분 전환을 위한 맛의 방향은?</legend>
+                    <label class="sensory-option">
+                        <input type="radio" name="taste" value="달콤" checked>
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">당 충전 100%</span>
+                        <span class="sensory-desc">설탕, 크림, 초콜릿... 무조건 달달하고 행복해지는 맛!</span>
+                    </label>
+                    <label class="sensory-option">
+                        <input type="radio" name="taste" value="고소">
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">은은한 고소함</span>
+                        <span class="sensory-desc">버터의 풍미, 씹을수록 올라오는 곡물의 든든한 맛!</span>
+                    </label>
+                </fieldset>
 
-        <fieldset class="sensory-question">
-            <legend>3. 오늘은 누구와 빵을 뜯을 예정인가요?</legend>
-            <label class="sensory-option">
-                <input type="radio" name="atmosphere" value="혼자" checked>
-                <span class="sensory-check"></span>
-                <span class="sensory-label">혼빵이 최고</span>
-                <span class="sensory-desc">나 혼자 조용히, 온전히 빵 맛에만 집중할 수 있는 곳</span>
-            </label>
-            <label class="sensory-option">
-                <input type="radio" name="atmosphere" value="여럿">
-                <span class="sensory-check"></span>
-                <span class="sensory-label">다 같이 뇸뇸</span>
-                <span class="sensory-desc">친구, 연인, 동료와 수다 떨며 즐기기 좋은 곳</span>
-            </label>
-        </fieldset>
+                <fieldset class="sensory-question">
+                    <legend><img src="/static/icons/planet.svg" alt="" class="legend-icon">3. 오늘은 누구와 빵을 뜯을 예정인가요?</legend>
+                    <label class="sensory-option">
+                        <input type="radio" name="atmosphere" value="혼자" checked>
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">혼빵이 최고</span>
+                        <span class="sensory-desc">나 혼자 조용히, 온전히 빵 맛에만 집중할 수 있는 곳</span>
+                    </label>
+                    <label class="sensory-option">
+                        <input type="radio" name="atmosphere" value="여럿">
+                        <span class="sensory-check"></span>
+                        <span class="sensory-label">다 같이 뇸뇸</span>
+                        <span class="sensory-desc">친구, 연인, 동료와 수다 떨며 즐기기 좋은 곳</span>
+                    </label>
+                </fieldset>
 
-        <button type="submit">내 취향 저격 빵집 찾기</button>
-    </form>
-    <a href="/" class="back-link">앗, 직접 세부 옵션으로 고를래요</a>
-</section>
+                <button type="submit"><img src="/static/icons/rocket.svg" alt="" class="btn-icon">내 취향 저격 빵집 찾기</button>
+            </form>
+            <a href="/" class="back-link">앗, 직접 세부 옵션으로 고를래요</a>
+        </section>
+    </div>
+</div>
 {% endblock %}

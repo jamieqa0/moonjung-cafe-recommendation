@@ -90,15 +90,15 @@ class TestHTMLPages:
 
     def test_index_has_welcome_message(self, client):
         response = client.get("/")
-        assert "우주 어디서든 환영합니다" in response.text
+        assert "우주에서 온 빵친구" in response.text
 
     def test_index_has_help_section(self, client):
         response = client.get("/")
-        assert "지구 음식 가이드" in response.text
+        assert "지구 빵 튜토리얼" in response.text
 
     def test_index_has_universe_button(self, client):
         response = client.get("/")
-        assert "내 빵집 찾기" in response.text
+        assert "내 취향 저격 빵집 찾기" in response.text
 
     def test_results_has_warm_header(self, client):
         response = client.post(

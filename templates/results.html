@@ -4,23 +4,30 @@
 
 {% block head %}
 {% if kakao_js_key %}
-<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_js_key }}"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_js_key }}&autoload=false"></script>
 {% endif %}
 {% endblock %}
 
 {% block content %}
 <section class="results">
-    <h2>당신을 위해 고른 문정동의 빵집</h2>
     {% if bakeries %}
 
     <div class="results-layout">
+        <!-- 상단 프레임 -->
+        <div class="results-top">
+            <h2><img src="/static/icons/telescope.svg" alt="" class="heading-icon">당신을 위해 고른 문정동의 빵집</h2>
+            <p class="results-summary">총 {{ bakeries|length }}곳의 빵집을 찾았습니다</p>
+        </div>
+
+        <!-- 좌측 프레임: 지도 -->
         {% if kakao_js_key %}
-        <div class="results-map-col">
+        <div class="results-left">
             <div id="bakery-map" class="bakery-map"></div>
         </div>
         {% endif %}
 
-        <div class="results-cards-col">
+        <!-- 우측 프레임: 카드 리스트 -->
+        <div class="results-right">
             <div class="cafe-list">
                 {% for bakery in bakeries %}
                 <article class="cafe-card" data-index="{{ loop.index0 }}">
@@ -50,72 +57,109 @@
     </div>
 
     {% else %}
+    <h2>당신을 위해 고른 문정동의 빵집</h2>
     <p class="empty-message">조건에 딱 맞는 곳은 없었지만, 그래도 다른 빵집 골라볼까요?</p>
     {% endif %}
-    <a href="/" class="back-link">다른 빵집도 궁금하다면</a>
+    <a href="/" class="back-link"><img src="/static/icons/ufo.svg" alt="" class="link-icon">다른 빵집도 궁금하다면</a>
     <p class="invitation-message">{{ invitation }}</p>
 </section>
 
 {% if kakao_js_key and bakeries %}
 <script>
-    (function () {
-        var bakeries = [
-            {% for b in bakeries %}
-        { name: "{{ b.name }}", lat: { { b.lat } }, lon: { { b.lon } }, menu: "{{ b.signature_menu }}" } { { "," if not loop.last } }
-    {% endfor %}
+    var bakeryData = [
+        {% for b in bakeries %}
+        {
+            name: {{ b.name | tojson }},
+            lat: {{ b.lat }},
+            lon: {{ b.lon }},
+            menu: {{ b.signature_menu | tojson }}
+        }{{ "," if not loop.last }}
+        {% endfor %}
     ];
 
-    var stationLat = 37.4858;
-    var stationLon = 127.1225;
-
-    var centerLat = bakeries.reduce(function (s, b) { return s + b.lat; }, 0) / bakeries.length;
-    var centerLon = bakeries.reduce(function (s, b) { return s + b.lon; }, 0) / bakeries.length;
-
-    var map = new kakao.maps.Map(document.getElementById('bakery-map'), {
-        center: new kakao.maps.LatLng(centerLat, centerLon),
-        level: 4
-    });
-
-    var stationMarker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(stationLat, stationLon),
-        map: map
-    });
-    var stationInfo = new kakao.maps.InfoWindow({
-        content: '<div style="padding:5px 10px;font-size:12px;font-weight:600;white-space:nowrap;font-family:sans-serif;">문정역</div>'
-    });
-    stationInfo.open(map, stationMarker);
-
-    var markers = [];
-    var infoWindows = [];
-
-    bakeries.forEach(function (b, i) {
-        var marker = new kakao.maps.Marker({
-            position: new kakao.maps.LatLng(b.lat, b.lon),
-            map: map
-        });
-        var infoContent = '<div style="padding:5px 10px;font-size:12px;white-space:nowrap;font-family:sans-serif;">'
-            + '<strong>' + (i + 1) + '. ' + b.name + '</strong><br>'
-            + '<span style="color:#7A8A9A;">' + b.menu + '</span></div>';
-        var info = new kakao.maps.InfoWindow({ content: infoContent });
-        markers.push(marker);
-        infoWindows.push(info);
-
-        kakao.maps.event.addListener(marker, 'click', function () {
-            infoWindows.forEach(function (iw) { iw.close(); });
-            info.open(map, marker);
-        });
-    });
-
-    // 카드 호버 시 해당 마커 인포윈도우 표시
-    document.querySelectorAll('.cafe-card').forEach(function (card) {
-        var idx = parseInt(card.getAttribute('data-index'));
-        card.addEventListener('mouseenter', function () {
-            infoWindows.forEach(function (iw) { iw.close(); });
-            if (markers[idx] && infoWindows[idx]) {
-                infoWindows[idx].open(map, markers[idx]);
+    function initMap() {
+        try {
+            if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
+                document.getElementById('bakery-map').innerHTML =
+                    '<p style="padding:2rem;text-align:center;color:#8A7668;">지도를 불러올 수 없습니다. (SDK 로드 실패)</p>';
+                return;
             }
-        });
-    });
+
+            if (bakeryData.length === 0) return;
+
+            var stationLat = 37.4858;
+            var stationLon = 127.1225;
+
+            var centerLat = bakeryData.reduce(function (s, b) { return s + b.lat; }, 0) / bakeryData.length;
+            var centerLon = bakeryData.reduce(function (s, b) { return s + b.lon; }, 0) / bakeryData.length;
+
+            var mapContainer = document.getElementById('bakery-map');
+            if (!mapContainer) return;
+
+            var map = new kakao.maps.Map(mapContainer, {
+                center: new kakao.maps.LatLng(centerLat, centerLon),
+                level: 4
+            });
+
+            var stationMarker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(stationLat, stationLon),
+                map: map
+            });
+
+            var stationInfo = new kakao.maps.InfoWindow({
+                content: '<div style="padding:5px 10px;font-size:12px;font-weight:600;">문정역</div>'
+            });
+            stationInfo.open(map, stationMarker);
+
+            var markers = [];
+            var infoWindows = [];
+
+            bakeryData.forEach(function (b, i) {
+                var marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(b.lat, b.lon),
+                    map: map
+                });
+
+                var infoContent =
+                    '<div style="padding:5px 10px;font-size:12px;">' +
+                    '<strong>' + (i + 1) + '. ' + b.name + '</strong><br>' +
+                    '<span style="color:#7A8A9A;">' + b.menu + '</span>' +
+                    '</div>';
+
+                var info = new kakao.maps.InfoWindow({
+                    content: infoContent
+                });
+
+                markers.push(marker);
+                infoWindows.push(info);
+
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    infoWindows.forEach(function (iw) { iw.close(); });
+                    info.open(map, marker);
+                });
+            });
+
+            document.querySelectorAll('.cafe-card').forEach(function (card) {
+                var idx = parseInt(card.getAttribute('data-index'));
+                card.addEventListener('mouseenter', function () {
+                    infoWindows.forEach(function (iw) { iw.close(); });
+                    if (markers[idx] && infoWindows[idx]) {
+                        infoWindows[idx].open(map, markers[idx]);
+                    }
+                });
+            });
+        } catch (e) {
+            console.error('지도 초기화 실패:', e);
+            document.getElementById('bakery-map').innerHTML =
+                '<p style="padding:2rem;text-align:center;color:#8A7668;">지도 로드 중 오류: ' + e.message + '</p>';
+        }
+    }
+
+    if (typeof kakao !== 'undefined' && typeof kakao.maps !== 'undefined' && typeof kakao.maps.load === 'function') {
+        kakao.maps.load(initMap);
+    } else {
+        window.addEventListener('load', initMap);
+    }
 </script>
 {% endif %}
 {% endblock %}
