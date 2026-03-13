@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="/static/style.css">
     {% block head %}{% endblock %}
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -21,11 +23,34 @@
         <main>
             {% block content %}{% endblock %}
         </main>
+
         <footer>
-            <p class="footer-quote">We Are The Universe.</p>
-            <p class="footer-info">문정동 빵 안내소 &middot; 2026 &middot; <a href="https://github.com/jamieqa0/moonjung-bakery-recommendation">GitHub</a></p>
-            <p class="footer-data-sources">데이터 출처: <a href="https://developers.kakao.com/docs/latest/ko/local/dev-guide" target="_blank" rel="noopener">카카오 로컬 API</a> &middot; <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">서울 열린데이터광장</a></p>
+            <p class="footer-quote">"We Are The Universe."</p>
+
+            <p class="footer-info">
+                문정동 빵 안내소 &middot; 2026
+            </p>
+
+            <p class="footer-info">
+                Created by <strong>jamie</strong>
+                <span class="divider">|</span>
+                A Project of <strong>JOBSTEALER</strong>
+                <span class="divider">|</span>
+                Powered by <strong>Claude</strong> &amp; <strong>Gemini</strong>
+            </p>
+
+            <p class="footer-data-sources">
+                <a href="https://github.com/jamieqa0/moonjung-bakery-recommendation" target="_blank">GitHub
+                    Repository</a>
+                <br>
+                데이터 출처:
+                <a href="https://developers.kakao.com/docs/latest/ko/local/dev-guide" target="_blank">카카오 API</a>
+                &middot;
+                <a href="https://data.seoul.go.kr" target="_blank">서울 열린데이터광장</a>
+            </p>
         </footer>
+
     </div>
 </body>
+
 </html>

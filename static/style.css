@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap');
 
 /* ===== Reset & Base ===== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 :root {
     --cream: #F5F0E8;
@@ -163,8 +169,13 @@ header nav a:hover::after {
 }
 
 @keyframes twinkle {
-    0% { opacity: 0.6; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .hero-icon {
@@ -228,7 +239,9 @@ header nav a:hover::after {
     gap: 0.5rem;
 }
 
-.earth-guide summary::-webkit-details-marker { display: none; }
+.earth-guide summary::-webkit-details-marker {
+    display: none;
+}
 
 .earth-guide summary::before {
     content: '\25B6';
@@ -341,7 +354,7 @@ header nav a:hover::after {
     color: var(--amber);
 }
 
-.chip-group input[type="radio"]:checked + label {
+.chip-group input[type="radio"]:checked+label {
     background: var(--ink);
     color: var(--warm-white);
     border-color: var(--ink);
@@ -890,6 +903,7 @@ footer {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -913,11 +927,25 @@ footer {
     animation: fadeInUp 0.6s ease-out both;
 }
 
-.cafe-card:nth-child(1) { animation-delay: 0.1s; }
-.cafe-card:nth-child(2) { animation-delay: 0.2s; }
-.cafe-card:nth-child(3) { animation-delay: 0.3s; }
-.cafe-card:nth-child(4) { animation-delay: 0.4s; }
-.cafe-card:nth-child(5) { animation-delay: 0.5s; }
+.cafe-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.cafe-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.cafe-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.cafe-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.cafe-card:nth-child(5) {
+    animation-delay: 0.5s;
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 860px) {
