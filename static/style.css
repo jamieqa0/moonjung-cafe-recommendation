@@ -181,8 +181,8 @@ header nav a:hover::after {
 .hero-icon {
     display: block;
     margin: 0 auto 1.2rem;
-    width: 72px;
-    height: 72px;
+    width: 100px;
+    height: 100px;
     opacity: 0.85;
 }
 

@@ -31,7 +31,9 @@
                     {% if bakery.flavor_profile %}
                     <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
                     {% endif %}
-                    <p><strong>가격대:</strong> {{ bakery.price_range }} · <strong>평점:</strong> {{ bakery.rating }} · <strong>문정역에서:</strong> {{ bakery.distance }}km</p>
+                    <p><strong>가격대:</strong> {{ bakery.price_range }} · <strong>평점:</strong> {{ bakery.rating }} ·
+                        <strong>문정역에서:</strong> {{ bakery.distance }}km
+                    </p>
                     <p class="extra-info">
                         {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
                         · {% if bakery.custom_order %}주문제작 가능{% else %}주문제작 불가{% endif %}
@@ -48,7 +50,7 @@
     </div>
 
     {% else %}
-    <p class="empty-message">조건에 딱 맞는 곳은 없었지만, 그래도 맛있는 곳을 골라봤어요.</p>
+    <p class="empty-message">조건에 딱 맞는 곳은 없었지만, 그래도 다른 빵집 골라볼까요?</p>
     {% endif %}
     <a href="/" class="back-link">다른 빵집도 궁금하다면</a>
     <p class="invitation-message">{{ invitation }}</p>
@@ -56,18 +58,18 @@
 
 {% if kakao_js_key and bakeries %}
 <script>
-(function() {
-    var bakeries = [
-        {% for b in bakeries %}
-        { name: "{{ b.name }}", lat: {{ b.lat }}, lon: {{ b.lon }}, menu: "{{ b.signature_menu }}" }{{ "," if not loop.last }}
-        {% endfor %}
+    (function () {
+        var bakeries = [
+            {% for b in bakeries %}
+        { name: "{{ b.name }}", lat: { { b.lat } }, lon: { { b.lon } }, menu: "{{ b.signature_menu }}" } { { "," if not loop.last } }
+    {% endfor %}
     ];
 
     var stationLat = 37.4858;
     var stationLon = 127.1225;
 
-    var centerLat = bakeries.reduce(function(s, b) { return s + b.lat; }, 0) / bakeries.length;
-    var centerLon = bakeries.reduce(function(s, b) { return s + b.lon; }, 0) / bakeries.length;
+    var centerLat = bakeries.reduce(function (s, b) { return s + b.lat; }, 0) / bakeries.length;
+    var centerLon = bakeries.reduce(function (s, b) { return s + b.lon; }, 0) / bakeries.length;
 
     var map = new kakao.maps.Map(document.getElementById('bakery-map'), {
         center: new kakao.maps.LatLng(centerLat, centerLon),
@@ -86,7 +88,7 @@
     var markers = [];
     var infoWindows = [];
 
-    bakeries.forEach(function(b, i) {
+    bakeries.forEach(function (b, i) {
         var marker = new kakao.maps.Marker({
             position: new kakao.maps.LatLng(b.lat, b.lon),
             map: map
@@ -98,23 +100,23 @@
         markers.push(marker);
         infoWindows.push(info);
 
-        kakao.maps.event.addListener(marker, 'click', function() {
-            infoWindows.forEach(function(iw) { iw.close(); });
+        kakao.maps.event.addListener(marker, 'click', function () {
+            infoWindows.forEach(function (iw) { iw.close(); });
             info.open(map, marker);
         });
     });
 
     // 카드 호버 시 해당 마커 인포윈도우 표시
-    document.querySelectorAll('.cafe-card').forEach(function(card) {
+    document.querySelectorAll('.cafe-card').forEach(function (card) {
         var idx = parseInt(card.getAttribute('data-index'));
-        card.addEventListener('mouseenter', function() {
-            infoWindows.forEach(function(iw) { iw.close(); });
+        card.addEventListener('mouseenter', function () {
+            infoWindows.forEach(function (iw) { iw.close(); });
             if (markers[idx] && infoWindows[idx]) {
                 infoWindows[idx].open(map, markers[idx]);
             }
         });
     });
-})();
+}) ();
 </script>
 {% endif %}
 {% endblock %}
