@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bakery.name }} - MoonBBang Station{% endblock %}
+
+{% block head %}
+{% if kakao_js_key %}
+<script type="text/javascript"
+    src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_js_key }}&autoload=false"></script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="detail">
+    <div class="detail-layout">
+        <div class="detail-header">
+            {% if bakery.photo_url %}
+            <img src="{{ bakery.photo_url }}" alt="{{ bakery.name }}" class="detail-photo"
+                onerror="this.onerror=null;this.src='{{ bakery.image_url }}';this.className='detail-illust';">
+            {% else %}
+            <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu }}" class="detail-illust">
+            {% endif %}
+            <div class="detail-header-text">
+                <h2>{{ bakery.name }}</h2>
+                <div class="address-row">
+                    {% if bakery.kakao_id %}
+                    <a href="https://place.map.kakao.com/{{ bakery.kakao_id }}" target="_blank"
+                        rel="noopener" class="map-link">[·]</a>
+                    {% else %}
+                    <a href="https://map.kakao.com/link/search/{{ bakery.address | urlencode }}" target="_blank"
+                        rel="noopener" class="map-link">[·]</a>
+                    {% endif %}
+                    <span class="address">{{ bakery.address }}</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="description">{{ bakery.description }}</p>
+
+        <div class="detail-info">
+            <p><img src="/static/icons/bread.svg" alt="" class="label-icon"><strong>대표 메뉴:</strong> {{ bakery.signature_menu }}</p>
+            {% if bakery.flavor_profile %}
+            <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
+            {% endif %}
+            <p><strong>가격대:</strong> {{ bakery.price_range }} · <strong>문정역에서:</strong> {{ (bakery.distance * 1000) | int }}m</p>
+            <p class="extra-info">
+                {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
+                · {% if bakery.custom_order %}주문제작 가능{% else %}주문제작 불가{% endif %}
+            </p>
+        </div>
+
+        <div class="tags">
+            {% for tag in bakery.tags %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+        </div>
+
+        {% if bakery.reviews %}
+        <div class="detail-reviews">
+            <h3><img src="/static/icons/star.svg" alt="" class="label-icon">방문자 리뷰</h3>
+            <ul>
+                {% for review in bakery.reviews %}
+                <li>{{ review }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if kakao_js_key %}
+        <div id="detail-map" class="bakery-map"></div>
+        {% endif %}
+    </div>
+
+    <a href="/" class="back-link"><img src="/static/icons/ufo.svg" alt="" class="link-icon">다른 빵집도 궁금하다면</a>
+</section>
+
+{% if kakao_js_key %}
+<script>
+    function initMap() {
+        try {
+            if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
+                document.getElementById('detail-map').innerHTML =
+                    '<p style="padding:2rem;text-align:center;color:#8A7668;">지도를 불러올 수 없습니다.</p>';
+                return;
+            }
+
+            var mapContainer = document.getElementById('detail-map');
+            if (!mapContainer) return;
+
+            var lat = {{ bakery.lat }};
+            var lon = {{ bakery.lon }};
+
+            var map = new kakao.maps.Map(mapContainer, {
+                center: new kakao.maps.LatLng(lat, lon),
+                level: 3
+            });
+
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lon),
+                map: map
+            });
+
+            var info = new kakao.maps.InfoWindow({
+                content: '<div style="padding:5px 10px;font-size:12px;"><strong>' +
+                    {{ bakery.name | tojson }} + '</strong></div>'
+            });
+            info.open(map, marker);
+        } catch (e) {
+            console.error('지도 초기화 실패:', e);
+        }
+    }
+
+    if (typeof kakao !== 'undefined' && typeof kakao.maps !== 'undefined' && typeof kakao.maps.load === 'function') {
+        kakao.maps.load(initMap);
+    } else {
+        window.addEventListener('load', initMap);
+    }
+</script>
+{% endif %}
+{% endblock %}

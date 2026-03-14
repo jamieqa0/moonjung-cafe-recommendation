@@ -21,7 +21,7 @@ def sample_bakeries() -> list[Bakery]:
             purpose=["브런치"],
             signature_menu="소금빵",
             price_range="일반",
-            rating=4.5,
+
             description="조용한 브런치 베이커리",
             reviews=["소금빵이 맛있어요", "브런치 메뉴가 훌륭해요"],
             parking=True,
@@ -36,7 +36,7 @@ def sample_bakeries() -> list[Bakery]:
             purpose=["선물", "케이크"],
             signature_menu="딸기 생크림 케이크",
             price_range="프리미엄",
-            rating=4.2,
+
             description="주문 제작 케이크 전문점",
             reviews=["케이크가 예뻐요", "선물 포장이 좋아요"],
             parking=False,
@@ -51,7 +51,7 @@ def sample_bakeries() -> list[Bakery]:
             purpose=["빵구경", "브런치"],
             signature_menu="버터크루아상",
             price_range="일반",
-            rating=3.8,
+
             description="가성비 동네 빵집",
             reviews=["가성비 최고", "크루아상이 맛있어요"],
             parking=False,
@@ -66,7 +66,7 @@ def sample_bakeries() -> list[Bakery]:
             purpose=["빵구경"],
             signature_menu="통밀 캄파뉴",
             price_range="프리미엄",
-            rating=4.7,
+
             description="정통 아티잔 베이커리",
             reviews=["빵 퀄리티가 최고예요"],
             parking=True,

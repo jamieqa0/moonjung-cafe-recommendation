@@ -28,7 +28,7 @@ def recommend(
     # 2. 점수 계산
     scored: list[tuple[float, Bakery]] = []
     for bakery in filtered:
-        score = bakery.rating * 0.5
+        score = 0.0
 
         if mood and mood in bakery.mood:
             score += 2

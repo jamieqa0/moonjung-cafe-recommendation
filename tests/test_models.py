@@ -14,7 +14,7 @@ class TestBakery:
             purpose=["브런치"],
             signature_menu="소금빵",
             price_range="일반",
-            rating=4.0,
+
             description="테스트용 베이커리",
         )
         assert bakery.name == "테스트베이커리"
@@ -30,7 +30,7 @@ class TestBakery:
             purpose=["브런치"],
             signature_menu="소금빵",
             price_range="일반",
-            rating=4.0,
+
             description="테스트용",
             reviews=["맛있어요", "또 올게요"],
         )

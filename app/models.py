@@ -9,7 +9,6 @@ class Bakery(BaseModel):
     purpose: list[str]     # 예: ["브런치", "선물", "케이크"]
     signature_menu: str
     price_range: str       # "일반" / "프리미엄"
-    rating: float
     description: str
     parking: bool = False         # 주차 가능 여부
     custom_order: bool = False    # 주문 제작 케이크 가능 여부
@@ -18,6 +17,7 @@ class Bakery(BaseModel):
     lon: float = 0.0             # 경도
     flavor_profile: str = ""       # 대표 메뉴 맛 프로필 (식감, 맛, 향)
     image_url: str = ""            # 빵집 일러스트 이미지 경로
+    photo_url: str = ""            # 빵집 실제 사진 URL (외부 이미지)
     reviews: list[str] = []
     tags: list[str] = []          # 리뷰 분석으로 생성된 특징 태그
     kakao_id: str = ""           # 카카오 플레이스 ID

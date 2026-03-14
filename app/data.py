@@ -26,9 +26,7 @@ MOONJEONG_STATION = (127.1225, 37.4858)  # (lon, lat)
 
 """
 [데이터 관리 가이드]
-1. 평점 업데이트: _RAW_BAKERIES 리스트에서 각 업체의 "rating" 값을 수정하세요.
-2. 카카오 플레이스 연결: "kakao_id"를 업데이트하면 결과 페이지에서 [·] 버튼이 해당 페이지로 연결됩니다.
-3. 데이터 출처: 현재 평점은 2026-03-14 수동 확인 결과(일부)를 반영하고 있습니다.
+1. 카카오 플레이스 연결: "kakao_id"를 업데이트하면 결과 페이지에서 [·] 버튼이 해당 페이지로 연결됩니다.
 """
 
 # 카카오맵 API로 수집한 실제 문정동 베이커리 데이터 (2026-03-12 기준)
@@ -42,7 +40,7 @@ _RAW_BAKERIES = [
         "signature_menu": "소금빵",
         "flavor_profile": "겉은 바삭, 속에서 짭짤한 버터가 흘러나온다. 한 입이면 지구가 좋아진다.",
         "price_range": "일반",
-        "rating": 4.2,
+
         "description": "문정역 바로 앞, 갓 구운 빵 향이 퍼지는 동네 명소",
         "parking": False,
         "custom_order": False,
@@ -67,7 +65,7 @@ _RAW_BAKERIES = [
         "signature_menu": "앙버터 스콘",
         "flavor_profile": "겉은 바삭하고 속은 촉촉한 스콘에 달콤한 앙금과 버터 한 덩이. 완벽한 조합.",
         "price_range": "일반",
-        "rating": 4.4,
+
         "description": "골목 안 숨은 수제 베이커리. 소량 생산의 정성.",
         "parking": False,
         "custom_order": False,
@@ -92,7 +90,7 @@ _RAW_BAKERIES = [
         "signature_menu": "플라워 레터링 케이크",
         "flavor_profile": "부드러운 시트 위에 생크림 꽃이 핀다. 보는 것만으로도 행복해지는 맛.",
         "price_range": "프리미엄",
-        "rating": 4.7,
+
         "description": "꽃 장식 주문 제작 케이크 전문. 예약 필수.",
         "parking": False,
         "custom_order": True,
@@ -117,7 +115,7 @@ _RAW_BAKERIES = [
         "signature_menu": "크루아상",
         "flavor_profile": "겹겹이 쌓인 페이스트리가 입안에서 사르르 녹는다. 버터 향의 정수.",
         "price_range": "프리미엄",
-        "rating": 4.5,
+
         "description": "프렌치 스타일 아티잔 베이커리. 크루아상의 성지.",
         "parking": False,
         "custom_order": False,
@@ -142,7 +140,7 @@ _RAW_BAKERIES = [
         "signature_menu": "우유 식빵",
         "flavor_profile": "폭신하고 부드러운 식빵에서 은은한 우유 향이 난다. 소박하지만 자꾸 생각나는 맛.",
         "price_range": "일반",
-        "rating": 4.3,
+
         "description": "동네 단골들이 매일 찾는 가성비 빵집",
         "parking": False,
         "custom_order": False,
@@ -167,7 +165,7 @@ _RAW_BAKERIES = [
         "signature_menu": "버터크루아상",
         "flavor_profile": "겉은 바삭, 속은 겹겹이 부드러운 버터 향. 한 입 베어 물면 고소한 바람이 분다.",
         "price_range": "일반",
-        "rating": 4.0,
+
         "description": "언제나 믿을 수 있는 프랜차이즈 빵집",
         "parking": True,
         "custom_order": False,
@@ -192,7 +190,7 @@ _RAW_BAKERIES = [
         "signature_menu": "통밀 캄파뉴",
         "flavor_profile": "투박한 겉면 아래 촉촉하고 쫀득한 속살. 씹을수록 고소한 곡물 향이 퍼진다.",
         "price_range": "프리미엄",
-        "rating": 4.5,
+
         "description": "천연 발효종으로 만드는 정통 수제 빵",
         "parking": False,
         "custom_order": False,
@@ -217,7 +215,7 @@ _RAW_BAKERIES = [
         "signature_menu": "딸기 생크림 케이크",
         "flavor_profile": "신선한 딸기의 상큼함과 생크림의 부드러움. 보는 것만으로도 행복해지는 맛.",
         "price_range": "프리미엄",
-        "rating": 4.6,
+
         "description": "정성껏 만드는 주문 제작 케이크 전문점",
         "parking": True,
         "custom_order": True,
@@ -242,7 +240,7 @@ _RAW_BAKERIES = [
         "signature_menu": "생크림케이크",
         "flavor_profile": "폭신한 시트 위에 부드러운 생크림. 달콤하지만 무겁지 않아서 자꾸 손이 간다.",
         "price_range": "일반",
-        "rating": 4.1,
+
         "description": "다양한 빵이 매일 신선하게 나오는 프랜차이즈 베이커리",
         "parking": True,
         "custom_order": True,
@@ -267,7 +265,7 @@ _RAW_BAKERIES = [
         "signature_menu": "크림치즈빵",
         "flavor_profile": "바삭한 겉면 안에 진한 크림치즈가 가득. 한 입 베어 물면 고소한 행복이 터진다.",
         "price_range": "일반",
-        "rating": 4.2,
+
         "description": "대전 명물 삼송빵집의 문정동 분점. 줄 서서 사가는 인기 맛집.",
         "parking": True,
         "custom_order": False,
@@ -409,7 +407,6 @@ def _load_public_bakeries() -> list[dict]:
                 sig_menu = "대표 빵"
                 price = "일반"
 
-            # 공공데이터에 평점 없으므로 기본 3.5 부여 (추천 점수에 참여하도록)
             public_bakeries.append({
                 "id": 1000 + i,
                 "name": biz_name,
@@ -419,7 +416,6 @@ def _load_public_bakeries() -> list[dict]:
                 "signature_menu": sig_menu,
                 "flavor_profile": "",
                 "price_range": price,
-                "rating": 3.5,
                 "description": f"서울시 공공데이터 등록 제과점",
                 "parking": False,
                 "custom_order": "케이크" in biz_name,
@@ -554,7 +550,7 @@ def _load_kakao_bakeries() -> list[dict]:
             "signature_menu": attrs["signature_menu"],
             "flavor_profile": "",
             "price_range": attrs["price_range"],
-            "rating": 4.0,
+    
             "description": f"문정동 인근 베이커리",
             "parking": False,
             "custom_order": attrs["custom_order"],
@@ -569,14 +565,28 @@ def _load_kakao_bakeries() -> list[dict]:
     return kakao_bakeries
 
 
+def _load_bakery_photos() -> dict[str, str]:
+    """data/bakery_photos.json에서 베이커리 사진 URL을 로드한다."""
+    json_path = os.path.join(os.path.dirname(__file__), "..", "data", "bakery_photos.json")
+    if not os.path.exists(json_path):
+        return {}
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
 def _build_bakeries() -> list[Bakery]:
     bakeries = []
+    photos = _load_bakery_photos()
 
     # 1. 시드 데이터 (리치 데이터: 리뷰, 맛 프로필 등 보유)
     for raw in _RAW_BAKERIES:
         tags = extract_tags(raw["reviews"])
         image_url = _get_illust_url(raw["signature_menu"])
-        bakeries.append(Bakery(**raw, tags=tags, image_url=image_url))
+        photo_url = photos.get(str(raw["id"]), "")
+        bakeries.append(Bakery(**raw, tags=tags, image_url=image_url, photo_url=photo_url))
 
     seen_names = {b.name for b in bakeries}
 

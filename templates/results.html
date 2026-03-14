@@ -33,10 +33,14 @@
                 {% for bakery in bakeries %}
                 <article class="cafe-card" data-index="{{ loop.index0 }}">
                     <div class="card-header">
+                        {% if bakery.photo_url %}
+                        <img src="{{ bakery.photo_url }}" alt="{{ bakery.name }}" class="card-photo"
+                            onerror="this.onerror=null;this.src='{{ bakery.image_url }}';this.className='card-illust';">
+                        {% else %}
                         <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu }}" class="card-illust">
+                        {% endif %}
                         <div class="card-header-text">
-                            <h3><a href="https://search.naver.com/search.naver?query={{ bakery.name | urlencode }}+문정동"
-                                    target="_blank" rel="noopener" class="bakery-name-link">{{ bakery.name }}</a></h3>
+                            <h3><a href="/bakery/{{ bakery.id }}" class="bakery-name-link">{{ bakery.name }}</a></h3>
                             <div class="address-row">
                                 {% if bakery.kakao_id %}
                                 <a href="https://place.map.kakao.com/{{ bakery.kakao_id }}" target="_blank"
@@ -54,7 +58,7 @@
                     {% if bakery.flavor_profile %}
                     <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
                     {% endif %}
-                    <p><strong>가격대:</strong> {{ bakery.price_range }} · <strong>평점:</strong> {{ bakery.rating }} ·
+                    <p><strong>가격대:</strong> {{ bakery.price_range }} ·
                         <strong>문정역에서:</strong> {{ (bakery.distance * 1000) | int }}m
                     </p>
                     <p class="extra-info">

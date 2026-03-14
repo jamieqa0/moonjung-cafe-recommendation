@@ -115,9 +115,7 @@ class TestHTMLPages:
         assert "invitation-message" in response.text
 
     def test_results_has_flavor_profile(self, client):
-        response = client.post(
-            "/recommend", data={"mood": "", "purpose": "", "price_range": ""}
-        )
+        response = client.get("/bakery/1")
         assert response.status_code == 200
         assert "flavor-profile" in response.text
 
@@ -210,3 +208,18 @@ class TestHTMLPages:
         response = client.get("/nonexistent-page")
         assert response.status_code == 404
         assert "이 빵집은 아직 이 우주에 없어요" in response.text
+
+    def test_bakery_detail_page(self, client):
+        response = client.get("/bakery/1")
+        assert response.status_code == 200
+        assert "더 브레드 레지던스" in response.text
+        assert "소금빵" in response.text
+
+    def test_bakery_detail_has_reviews(self, client):
+        response = client.get("/bakery/1")
+        assert response.status_code == 200
+        assert "방문자 리뷰" in response.text
+
+    def test_bakery_detail_not_found(self, client):
+        response = client.get("/bakery/9999")
+        assert response.status_code == 404

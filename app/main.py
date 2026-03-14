@@ -75,6 +75,20 @@ def recommend_page(
     )
 
 
+@app.get("/bakery/{bakery_id}", response_class=HTMLResponse)
+def bakery_detail(request: Request, bakery_id: int):
+    bakery = next((b for b in BAKERIES if b.id == bakery_id), None)
+    if bakery is None:
+        return templates.TemplateResponse(
+            "404.html", {"request": request}, status_code=404
+        )
+    kakao_js_key = os.environ.get("KAKAO_JS_KEY", "")
+    return templates.TemplateResponse(
+        "detail.html",
+        {"request": request, "bakery": bakery, "kakao_js_key": kakao_js_key},
+    )
+
+
 @app.get("/sensory", response_class=HTMLResponse)
 def sensory_page(request: Request):
     return templates.TemplateResponse("sensory.html", {"request": request})

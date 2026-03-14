@@ -54,7 +54,7 @@ python -m pytest tests/test_recommender.py::TestRecommendBasicFilter::test_filte
 - **가격대 기준**: 일반 / 프리미엄 (이름·카테고리 키워드 기반 자동 추론)
 
 1. **필터링 단계**: parking, custom_order는 정확 일치 필터. max_distance는 `<= max_distance`로 반경 필터.
-2. **점수 계산**: `rating × 0.5` + mood 일치 `+2` + purpose 일치 `+2` + price_range 일치 `+1` + 거리 보너스 `((max_distance - distance) / max_distance) × 3` + 랜덤 다양화 `0~1.5`
+2. **점수 계산**: mood 일치 `+2` + purpose 일치 `+2` + price_range 일치 `+1` + 거리 보너스 `((max_distance - distance) / max_distance) × 3` + 랜덤 다양화 `0~1.5`
 3. **정렬**: 점수 내림차순, 상위 max_results개 반환 (HTML 라우트: 5, API 기본: 5)
 
 ### 데이터 흐름

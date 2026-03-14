@@ -4,12 +4,10 @@ from app.recommender import recommend
 class TestRecommendBasicFilter:
     """기본 필터 (mood, purpose, price_range) 테스트"""
 
-    def test_no_filter_returns_high_rated_bakeries(self, sample_bakeries):
+    def test_no_filter_returns_all_bakeries(self, sample_bakeries):
         result = recommend(sample_bakeries)
-        names = [b.name for b in result]
-        # 높은 평점의 베이커리가 결과에 포함되어야 한다
-        assert "베이커리D" in names  # rating 4.7
-        assert "베이커리A" in names  # rating 4.5
+        assert len(result) <= 5
+        assert len(result) > 0
 
     def test_filter_by_mood(self, sample_bakeries):
         result = recommend(sample_bakeries, mood="아늑한")
@@ -121,13 +119,10 @@ class TestDistanceFilter:
 class TestScoreCalculation:
     """추천 점수 계산 테스트"""
 
-    def test_score_base_includes_rating(self, sample_bakeries):
-        """조건 없으면 높은 평점 베이커리가 상위에 포함된다"""
+    def test_no_conditions_returns_all(self, sample_bakeries):
+        """조건 없으면 전체 베이커리가 반환된다"""
         result = recommend(sample_bakeries, max_results=10)
-        top_half = result[:2]
-        top_names = [b.name for b in top_half]
-        # 평점 상위(D=4.7, A=4.5)가 상위권에 있어야 한다
-        assert "베이커리D" in top_names or "베이커리A" in top_names
+        assert len(result) == 4
 
     def test_mood_match_boosts_score(self, sample_bakeries):
         """mood 일치 시 점수 상승으로 순위 변동"""
@@ -174,4 +169,4 @@ class TestScoreCalculation:
 
 def _get_score(bakery):
     """테스트 헬퍼: 기본 점수 계산"""
-    return bakery.rating * 0.5
+    return 0.0
