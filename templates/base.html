@@ -91,9 +91,10 @@
                 }
             },
             interactivity: {
+                detectsOn: "window",
                 events: {
                     onHover: {
-                        enable: true,
+                        enable: window.matchMedia("(hover: hover)").matches,
                         mode: "bubble"
                     }
                 },

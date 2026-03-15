@@ -105,11 +105,15 @@ python -m pytest tests/test_recommender.py::TestRecommendBasicFilter::test_filte
 - **templates/detail.html** — 베이커리 상세 페이지. 실제 사진(photo_url) + 일러스트 + 상세 정보 표시
 - **templates/bakeries.html** — 전체 빵집 목록. 거리순 카드 그리드. Motion 라이브러리 hover 애니메이션(scale+rotate). 네이버·카카오 외부 링크 버튼
 - **templates/404.html** — 커스텀 404 ("이 빵집은 아직 이 우주에 없어요")
-- **static/style.css** — 따뜻한 앰버/크러스트 색상 팔레트 (`--cream`, `--ink`, `--amber`, `--crust`). CSS Grid 2컬럼 레이아웃, 칩 그룹, 커스텀 라디오/체크박스
+- **static/style.css** — 따뜻한 앰버/크러스트 색상 팔레트 (`--cream`, `--ink`, `--amber`, `--crust`). CSS Grid 2컬럼 레이아웃, 칩 그룹, 커스텀 라디오/체크박스. **`font-size`는 반드시 CSS 변수 사용**: `--text-xs` / `--text-sm` / `--text-base` / `--text-md` / `--text-lg` / `--text-xl` / `--text-2xl` / `--text-3xl` — 하드코딩 절대 금지
 - **static/icons/** — 카와이 스타일 우주 테마 SVG 아이콘 세트 (골든 앰버 #FBBD40 fill + 다크 퍼플 #3A1F54 outline). 헤더, 네비, 칩, 버튼, 폼 라벨 등에 사용
 - **static/illust/** — 빵 종류별 카와이 SVG 일러스트 (croissant/cake/loaf/scone/macaron). 결과 카드에 표시. `_get_illust_url()`로 대표 메뉴 키워드 기반 자동 매핑
 - **static/hero-alien.svg** — 히어로 일러스트 (빵을 든 우주인 캐릭터)
 - **static/favicon.svg** — SVG 파비콘 (카와이 빵 아이콘)
+
+### UI/UX 규칙
+
+- **"빵맛집" 태그·용어 절대 사용 금지** — 서비스 자체가 빵집 추천이므로 중복 표현임. 대신 구체적인 특징 태그(예: "아늑한", "포토제닉") 사용.
 
 ### 데이터 무결성 원칙
 

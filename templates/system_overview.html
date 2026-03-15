@@ -30,7 +30,9 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            background-image:
                 radial-gradient(circle at 20% 30%, rgba(255, 179, 71, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
         }
@@ -241,7 +243,18 @@
 
         @media (max-width: 768px) {
             .hero-title { font-size: 2.5rem; }
+            .section-title { font-size: 1.5rem; }
             .tech-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 2rem 1.2rem; }
+            header { margin-bottom: 3rem; }
+            .hero-title { font-size: 1.9rem; }
+            .hero-subtitle { font-size: 0.95rem; }
+            .section-title { font-size: 1.25rem; }
+            .tech-grid { grid-template-columns: 1fr 1fr; }
+            .card { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -544,27 +557,61 @@ graph TD
         </footer>
     </div>
 
+    <!-- 모바일 오버라이드: 섹션 내 인라인 <style> 이후에 선언해야 적용됨 -->
+    <style>
+        /* 3D 플립 카드: 터치 기기에서 탭으로 플립 */
+        .tech-item {
+            touch-action: manipulation;
+        }
+        .tech-item.flipped .tech-inner {
+            transform: rotateY(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .module-list {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .module-list {
+                gap: 1.2rem !important;
+            }
+            /* #features .card 인라인 스타일 오버라이드 */
+            #features .card {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+            .tech-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .tech-item {
+                height: 140px;
+            }
+        }
+    </style>
+
     <script>
         // Mermaid initialization
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 
         // Intersection Observer for section animations
         const sections = document.querySelectorAll('section');
-        const observerOptions = {
-            threshold: 0.1
-        };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
 
-        sections.forEach(section => {
-            observer.observe(section);
-        });
+        // 3D 플립 카드: 터치 기기에서 탭으로 플립 토글
+        if (!window.matchMedia('(hover: hover)').matches) {
+            document.querySelectorAll('.tech-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('flipped');
+                });
+            });
+        }
     </script>
 </body>
 </html>

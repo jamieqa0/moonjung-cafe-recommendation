@@ -87,6 +87,8 @@ body {
     line-height: var(--leading-normal);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 a {
@@ -2078,4 +2080,28 @@ footer::before {
         padding: 0.45rem 0.85rem;
         font-size: var(--text-sm);
     }
+}
+
+/* ===== 터치/모바일 전용 ===== */
+
+/* iOS Safari: background-attachment:fixed 미지원으로 스크롤 시 배경 미끄러짐 현상 방지 */
+@supports (-webkit-touch-callout: none) {
+    body {
+        background-attachment: scroll;
+    }
+}
+
+/* 툴팁은 hover 지원 기기에서만 표시 — 터치 기기에서 첫 탭이 hover로 소비되어 인터렉션이 두 번 필요한 문제 해결 */
+@media (hover: none) {
+    .chip-group label[data-tooltip]::after,
+    .chip-group-label[data-tooltip]::after {
+        display: none;
+    }
+}
+
+/* 칩·체크박스 라벨: 스크롤 제스처와 구분되도록 탭 인식 보장 */
+.chip-group label,
+.checkbox-label,
+.sensory-option {
+    touch-action: manipulation;
 }
