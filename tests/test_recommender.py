@@ -109,6 +109,31 @@ class TestDistanceFilter:
         result = recommend(sample_bakeries, max_distance=0.0)
         assert len(result) == 0
 
+    def test_min_distance_excludes_close_bakeries(self, sample_bakeries):
+        """min_distance 이상인 베이커리만 반환 (가까운 곳 제외)"""
+        result = recommend(sample_bakeries, min_distance=0.5, max_results=10)
+        for bakery in result:
+            assert bakery.distance >= 0.5
+        names = [b.name for b in result]
+        assert "베이커리A" not in names  # 0.3km — 제외
+        assert "베이커리B" in names      # 1.2km — 포함
+        assert "베이커리D" in names      # 2.0km — 포함
+
+    def test_min_distance_none_returns_all(self, sample_bakeries):
+        """min_distance 미지정 시 전체 반환"""
+        result = recommend(sample_bakeries, min_distance=None, max_results=10)
+        assert len(result) == 4
+
+    def test_min_distance_and_max_distance_combined(self, sample_bakeries):
+        """min_distance + max_distance 조합 — 범위 내 베이커리만 반환"""
+        result = recommend(sample_bakeries, min_distance=0.5, max_distance=1.5, max_results=10)
+        for bakery in result:
+            assert 0.5 <= bakery.distance <= 1.5
+        names = [b.name for b in result]
+        assert "베이커리B" in names  # 1.2km — 범위 내
+        assert "베이커리A" not in names  # 0.3km — 너무 가까움
+        assert "베이커리D" not in names  # 2.0km — 너무 멂
+
     def test_closer_bakeries_get_higher_score(self, sample_bakeries):
         """가까운 베이커리가 거리 보너스를 받아 점수가 높아진다"""
         result = recommend(sample_bakeries, max_distance=3.0, max_results=10)
@@ -165,6 +190,58 @@ class TestScoreCalculation:
         result = recommend(sample_bakeries, max_distance=3.0, max_results=2)
         distances = [b.distance for b in result]
         assert min(distances) <= 1.0
+
+
+class TestTagBasedPurposeFilter:
+    """tags 필드로도 purpose 필터/점수가 동작하는지 테스트"""
+
+    def _make_bakeries(self):
+        from app.models import Bakery
+        return [
+            Bakery(
+                id=1, name="소금빵집", address="문정동 1",
+                mood=["아늑한"], purpose=[],
+                signature_menu=["소금빵"], price_range="일반",
+                description="소금빵 전문",
+                tags=["소금빵맛집"],
+                distance=0.3,
+            ),
+            Bakery(
+                id=2, name="일반빵집", address="문정동 2",
+                mood=["편안한"], purpose=[],
+                signature_menu=["식빵"], price_range="일반",
+                description="동네 빵집",
+                tags=[],
+                distance=0.4,
+            ),
+        ]
+
+    def test_purpose_matches_tag_field(self):
+        """purpose가 bakery.tags에 있으면 해당 베이커리가 상위 결과로 온다"""
+        result = recommend(self._make_bakeries(), purpose="소금빵맛집", max_results=10)
+        assert result[0].name == "소금빵집"
+
+    def test_purpose_not_in_tags_gets_no_bonus(self):
+        """일치하는 tag 없으면 점수 보너스 없음 — 거리 기준으로 정렬됨"""
+        result = recommend(self._make_bakeries(), purpose="베이글맛집", max_results=10)
+        names = [b.name for b in result]
+        assert "소금빵집" in names
+        assert "일반빵집" in names
+
+    def test_purpose_in_bakery_purpose_still_works(self):
+        """기존 purpose 필드 매칭은 그대로 유지된다"""
+        from app.models import Bakery
+        bakeries = [
+            Bakery(
+                id=1, name="케이크집", address="문정동 1",
+                mood=["감성적인"], purpose=["케이크"],
+                signature_menu=["생크림케이크"], price_range="프리미엄",
+                description="케이크 전문점", tags=[],
+                distance=0.5,
+            ),
+        ]
+        result = recommend(bakeries, purpose="케이크", max_results=10)
+        assert result[0].name == "케이크집"
 
 
 def _get_score(bakery):

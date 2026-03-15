@@ -223,3 +223,25 @@ class TestHTMLPages:
     def test_bakery_detail_not_found(self, client):
         response = client.get("/bakery/9999")
         assert response.status_code == 404
+
+    def test_bakeries_all_page(self, client):
+        response = client.get("/bakeries")
+        assert response.status_code == 200
+        assert "문정동의 모든 빵집" in response.text
+
+    def test_bakeries_all_shows_every_bakery(self, client):
+        from app.data import BAKERIES
+        response = client.get("/bakeries")
+        for bakery in BAKERIES:
+            assert bakery.name in response.text
+
+    def test_bakeries_all_sorted_by_distance(self, client):
+        from app.data import BAKERIES
+        response = client.get("/bakeries")
+        assert response.status_code == 200
+        # 거리순 정렬 확인: 첫 번째 빵집이 HTML에서 가장 먼저 등장해야 함
+        sorted_names = [b.name for b in sorted(BAKERIES, key=lambda b: b.distance)]
+        text = response.text
+        first_pos = text.find(sorted_names[0])
+        last_pos = text.find(sorted_names[-1])
+        assert first_pos < last_pos

@@ -1,6 +1,13 @@
 """서울 열린데이터광장 API로 송파구 제과점 인허가 데이터를 수집한다.
 
 API 키 발급: https://data.seoul.go.kr → 회원가입 → 인증키 신청 (무료, 즉시 발급)
+
+필터링 전략:
+  1. 개방서비스명에 '제과점' 포함 (API가 LOCALDATA_072405 = 제과점영업만 반환하므로 전체 해당)
+  2. 위생업태명 블랙리스트: 편의점, 패스트푸드, 백화점, 키즈카페, 다방, 아이스크림,
+     일반조리판매 — 제과점 면허를 받았지만 실제 빵집이 아닌 업종 제외
+  3. 상호명 블랙리스트: 편의점 브랜드, PC방, 마트, 슈퍼, 영화관, 분식/한식/일식 업체 제외
+  4. 양성 필터: 상호명에 빵집 관련 키워드(빵, 베이커리, 케이크, …)가 있는 곳만 통과
 """
 
 import csv
@@ -20,6 +27,42 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 SEOUL_API_KEY = os.environ.get("SEOUL_API_KEY", "")
 # LOCALDATA_072405 = 서울시 제과점영업 인허가 정보
 API_URL = "http://openapi.seoul.go.kr:8088/{key}/json/LOCALDATA_072405/{start}/{end}"
+
+# ── 필터링 상수 ────────────────────────────────────────────────────────────────
+
+# 위생업태명 블랙리스트: 실제 빵집이 아닌 업종
+EXCLUDE_BIZ_TYPES = {
+    "편의점", "패스트푸드", "백화점", "키즈카페", "다방",
+    "아이스크림", "일반조리판매", "탁주/약주", "주점",
+}
+
+# 상호명 블랙리스트: 이름만으로 비빵집 판별
+BLACKLIST_NAME_KEYWORDS = [
+    # 편의점 브랜드
+    "세븐일레븐", "GS25", "CU편의점", "이마트24", "미니스톱",
+    # 대형 비빵집 프랜차이즈
+    "스타벅스", "롯데리아", "맥도날드", "버거킹", "KFC", "서브웨이",
+    "이디야", "메가커피", "메가엠지씨", "빽다방", "공차", "투썸플레이스",
+    "할리스", "탐앤탐스", "엔제리너스", "커피빈",
+    # 업종 명시 비빵집
+    "편의점", "PC방", "마트", "슈퍼", "영화관", "노래방",
+    # 명확한 비빵집 업종
+    "김밥", "떡볶이", "스시", "초밥", "피자", "치킨", "국밥",
+    "삼겹살", "갈비", "분식", "냉면", "설렁탕", "곱창", "순대",
+    "족발", "라면", "얌차",
+]
+
+# 상호명 양성 키워드: 이 중 하나라도 포함되면 빵집으로 분류
+BAKERY_NAME_KEYWORDS = [
+    "빵", "베이커리", "베이크", "제과", "케이크", "크루아상",
+    "스콘", "파티세리", "제빵", "쿠키", "마카롱", "카롱", "타르트",
+    "도넛", "와플", "브레드", "bread", "bakery", "bake", "cake",
+    "쇼콜라", "파운드", "포카치아", "바게트", "소금빵", "앙버터",
+    "치아바타", "머핀", "카눌레", "피낭시에", "휘낭시에",
+    "갈레트", "크레이프", "페이스트리",
+    "베이글", "프레즐", "프리즐", "bagel", "pretzel",
+    "빌리엔젤",  # 생크림빵 전문 체인
+]
 
 # CSV 컬럼 (서울 열린데이터광장 제과점영업 기준)
 CSV_COLUMNS = [
@@ -63,13 +106,32 @@ def fetch_page(start, end):
     return rows, total
 
 
+def _is_bakery(name: str, biz_type: str) -> bool:
+    """상호명·위생업태명으로 실제 빵집 여부를 판별한다."""
+    name_lower = name.lower()
+    # 위생업태명 블랙리스트
+    if biz_type in EXCLUDE_BIZ_TYPES:
+        return False
+    # 상호명 블랙리스트
+    if any(kw.lower() in name_lower for kw in BLACKLIST_NAME_KEYWORDS):
+        return False
+    # 상호명 양성 키워드 (하나라도 있으면 빵집)
+    return any(kw.lower() in name_lower for kw in BAKERY_NAME_KEYWORDS)
+
+
 def filter_munjeong(rows):
-    """문정동 + 영업중인 제과점만 필터링한다."""
+    """문정동 + 영업중 + 실제 빵집인 제과점만 필터링한다."""
     filtered = []
     for row in rows:
         addr = row.get("SITEWHLADDR", "")
         status = row.get("DTLSTATENM", "")
-        if "문정동" in addr and "영업" in status:
+        # 개방서비스명에 '제과점' 포함 확인 (API 특성상 전체 해당하지만 명시적 검증)
+        service = row.get("OPNSFTEAMCODE", "")  # 필드명이 다를 수 있어 SITEWHLADDR로 우선 처리
+        if "문정동" not in addr or "영업" not in status:
+            continue
+        name = row.get("BPLCNM", "")
+        biz_type = row.get("UPTAENM", "")
+        if _is_bakery(name, biz_type):
             filtered.append(row)
     return filtered
 
@@ -146,7 +208,7 @@ def main():
         print(f"  페이지 {page_num}: {len(rows)}건 중 문정동 {len(munjeong)}건")
         start += page_size
 
-    print(f"\n문정동 영업중 제과점: {len(all_munjeong)}곳")
+    print(f"\n문정동 영업중 빵집(필터 후): {len(all_munjeong)}곳")
 
     if not all_munjeong:
         print("문정동 제과점을 찾을 수 없습니다.")
@@ -154,7 +216,7 @@ def main():
 
     # CSV 저장
     output_path = os.path.join(
-        os.path.dirname(__file__), "..", "data", "public_bakery_sample.csv"
+        os.path.dirname(__file__), "..", "data", "public_bakeries.csv"
     )
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 

@@ -1,5 +1,12 @@
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
+
+# Windows 콘솔 UTF-8 설정 (한글 깨짐 방지)
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
 
 from app.main import app
 from app.models import Bakery
@@ -19,7 +26,7 @@ def sample_bakeries() -> list[Bakery]:
             address="문정동 1",
             mood=["아늑한", "모던한"],
             purpose=["브런치"],
-            signature_menu="소금빵",
+            signature_menu=["소금빵"],
             price_range="일반",
 
             description="조용한 브런치 베이커리",
@@ -34,7 +41,7 @@ def sample_bakeries() -> list[Bakery]:
             address="문정동 2",
             mood=["감성적인"],
             purpose=["선물", "케이크"],
-            signature_menu="딸기 생크림 케이크",
+            signature_menu=["딸기 생크림 케이크"],
             price_range="프리미엄",
 
             description="주문 제작 케이크 전문점",
@@ -48,8 +55,8 @@ def sample_bakeries() -> list[Bakery]:
             name="베이커리C",
             address="문정동 3",
             mood=["편안한"],
-            purpose=["빵구경", "브런치"],
-            signature_menu="버터크루아상",
+            purpose=["브런치"],
+            signature_menu=["버터크루아상"],
             price_range="일반",
 
             description="가성비 동네 빵집",
@@ -63,8 +70,8 @@ def sample_bakeries() -> list[Bakery]:
             name="베이커리D",
             address="문정동 4",
             mood=["모던한"],
-            purpose=["빵구경"],
-            signature_menu="통밀 캄파뉴",
+            purpose=["식사빵"],
+            signature_menu=["통밀 캄파뉴"],
             price_range="프리미엄",
 
             description="정통 아티잔 베이커리",

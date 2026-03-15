@@ -3,7 +3,7 @@
 import os
 import tempfile
 
-from app.data import BAKERIES, _haversine, _load_public_bakeries, _parse_coordinate, _tm_to_wgs84
+from app.data import BAKERIES, _haversine, _infer_attributes, _load_public_bakeries, _parse_coordinate, _tm_to_wgs84
 
 
 class TestDataIntegrity:
@@ -29,6 +29,66 @@ class TestDataIntegrity:
 
     def test_minimum_bakery_count(self):
         assert len(BAKERIES) >= 10
+
+
+class TestInferAttributes:
+    """_infer_attributes 추론 로직 단위 테스트"""
+
+    def test_hans_is_not_large_bakery(self):
+        """한스는 소규모 프랜차이즈 — 대형빵집 mood 없어야 함"""
+        result = _infer_attributes("한스 문정점", "제과,베이커리 > 한스")
+        assert "대형빵집" not in result["mood"]
+
+    def test_paris_baguette_is_large_bakery(self):
+        """파리바게뜨는 대형빵집 mood 포함"""
+        result = _infer_attributes("파리바게뜨 문정중앙점", "제과,베이커리 > 파리바게뜨")
+        assert "대형빵집" in result["mood"]
+
+    def test_franchise_without_name_clue_uses_default_menu(self):
+        """이름에 메뉴 힌트 없는 프랜차이즈는 특정 메뉴를 추측하지 않는다"""
+        result = _infer_attributes("파리바게뜨 문정중앙점", "제과,베이커리")
+        assert "베이글" not in result["signature_menu"]
+        assert "크루아상" not in result["signature_menu"]
+        assert "케이크" not in result["signature_menu"]
+
+    def test_hans_uses_default_menu(self):
+        """한스는 이름에 메뉴 힌트 없으므로 특정 메뉴를 추측하지 않는다"""
+        result = _infer_attributes("한스 문정점", "제과,베이커리 > 한스")
+        assert "베이글" not in result["signature_menu"]
+        assert "크루아상" not in result["signature_menu"]
+        assert "케이크" not in result["signature_menu"]
+
+    def test_name_with_literal_food_infers_menu(self):
+        """이름에 메뉴가 직접 포함되면 해당 메뉴로 추론"""
+        assert "베이글" in _infer_attributes("베이글집", "")["signature_menu"]
+        assert "와플" in _infer_attributes("와플대학 문정캠퍼스", "")["signature_menu"]
+        assert "포카치아" in _infer_attributes("포카치아", "")["signature_menu"]
+
+    def test_oegaeyin_bangadan_is_rice_bread(self):
+        """외계인방앗간은 쌀빵집 — 떡·한과 아님"""
+        result = _infer_attributes("외계인방앗간 문정점", "제과,베이커리")
+        assert "쌀빵" in result["signature_menu"]
+        assert "떡·한과" not in result["signature_menu"]
+
+    def test_artize_is_premium(self):
+        """아티제는 프리미엄 가격대"""
+        result = _infer_attributes("아티제 송파아이파크점", "제과,베이커리 > 아티제")
+        assert result["price_range"] == "프리미엄"
+
+    def test_sorimsa_is_macaron(self):
+        """소림사는 마카롱 브랜드"""
+        result = _infer_attributes("소림사 문정점", "제과,베이커리")
+        assert "마카롱" in result["signature_menu"]
+
+    def test_cake_shop_inferred(self):
+        """이름에 '케이크' 포함 시 케이크 전문점으로 추론"""
+        result = _infer_attributes("달콤케이크", "제과,베이커리")
+        assert "케이크" in result["purpose"]
+
+    def test_bagel_shop_inferred(self):
+        """이름에 '베이글' 포함 시 베이글 전문점으로 추론"""
+        result = _infer_attributes("베이글집", "제과,베이커리")
+        assert "베이글" in result["signature_menu"]
 
 
 class TestHaversine:

@@ -13,7 +13,7 @@
 <section class="results">
     {% if bakeries %}
 
-    <div class="results-layout">
+    <div class="results-layout{% if not kakao_js_key %} results-layout--no-map{% endif %}">
         <!-- 상단 프레임 -->
         <div class="results-top">
             <h2><img src="/static/icons/telescope.svg" alt="" class="heading-icon">당신을 위해 고른 문정동의 빵집</h2>
@@ -42,7 +42,7 @@
                             referrerpolicy="no-referrer"
                             onerror="this.onerror=null;this.src='{{ bakery.image_url }}';this.className='card-illust';">
                         {% else %}
-                        <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu }}" class="card-illust">
+                        <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu | join(', ') }}" class="card-illust">
                         {% endif %}
                         <div class="card-header-text">
                             <h3>{{ bakery.name }}</h3>
@@ -58,20 +58,14 @@
                                 {% endif %}
                                 <span class="address">{{ bakery.address }}</span>
                             </div>
+                            <p class="description">{{ bakery.description }}</p>
+                            <p class="card-signature-menu"><strong>대표 메뉴:</strong> {{ bakery.signature_menu | map('strip_parens') | join(' · ') }}</p>
                         </div>
                     </div>
-                    <p class="description">{{ bakery.description }}</p>
-                    <p><strong>대표 메뉴:</strong> {{ bakery.signature_menu }}</p>
                     {% if bakery.flavor_profile %}
                     <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
                     {% endif %}
-                    <p><strong>가격대:</strong> {{ bakery.price_range }} ·
-                        <strong>문정역에서:</strong> {{ (bakery.distance * 1000) | int }}m
-                    </p>
-                    <p class="extra-info">
-                        {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
-                        · {% if bakery.custom_order %}주문제작 가능{% else %}주문제작 불가{% endif %}
-                    </p>
+                    <p class="card-meta"><strong>가격대:</strong> {{ bakery.price_range }} · <strong>문정역에서:</strong> {{ (bakery.distance * 1000) | int }}m{% if bakery.parking == true %} <span class="info-tag info-tag--parking">주차가능</span>{% elif bakery.parking == false %} <span class="info-tag info-tag--no-parking">주차불가</span>{% endif %}{% if bakery.custom_order %} <span class="info-tag info-tag--custom">주문제작가능</span>{% endif %}</p>
                     <div class="tags">
                         {% for tag in bakery.tags %}
                         <span class="tag">{{ tag }}</span>
@@ -112,7 +106,7 @@
         name: {{ b.name | tojson }},
         lat: {{ b.lat }},
         lon: {{ b.lon }},
-        menu: {{ b.signature_menu | tojson }}
+        menu: {{ b.signature_menu | join(' · ') | tojson }}
     }{{ "," if not loop.last }}
     {% endfor %}
     ];
@@ -223,7 +217,6 @@
                     '<div class="map-overlay-card">' +
                     '<button class="overlay-close" data-overlay-close aria-label="닫기">&times;</button>' +
                     '<div class="overlay-name"><span class="overlay-num">' + (i + 1) + '</span>' + b.name + '</div>' +
-                    '<div class="overlay-menu">' + b.menu + '</div>' +
                     '</div>' +
                     '</div>';
 

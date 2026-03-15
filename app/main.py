@@ -1,5 +1,6 @@
 import os
 import random
+import re
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -21,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 app = FastAPI(title="MoonBBang Station")
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
+templates.env.filters["strip_parens"] = lambda s: re.sub(r"\s*\([^)]*\)", "", s).strip()
 
 app.include_router(cafes.router)
 app.include_router(recommend_router.router)
@@ -89,9 +91,23 @@ def bakery_detail(request: Request, bakery_id: int):
     )
 
 
+@app.get("/bakeries", response_class=HTMLResponse)
+def bakeries_all(request: Request):
+    sorted_bakeries = sorted(BAKERIES, key=lambda b: b.distance)
+    return templates.TemplateResponse(
+        "bakeries.html",
+        {"request": request, "bakeries": sorted_bakeries},
+    )
+
+
 @app.get("/sensory", response_class=HTMLResponse)
 def sensory_page(request: Request):
     return templates.TemplateResponse("sensory.html", {"request": request})
+
+
+@app.get("/overview", response_class=HTMLResponse)
+def system_overview(request: Request):
+    return templates.TemplateResponse("system_overview.html", {"request": request})
 
 
 @app.post("/sensory", response_class=HTMLResponse)

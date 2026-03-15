@@ -1,13 +1,13 @@
 """카카오 이미지 검색 API로 베이커리 사진 URL을 수집한다.
 
 사용법:
-    python scripts/fetch_bakery_photos.py
+    python scripts/fetch_kakao_photos.py
 
 필요 환경변수:
     KAKAO_REST_API_KEY — 카카오 REST API 키 (.env 파일에 설정)
 
 결과:
-    data/bakery_photos.json — {bakery_id: photo_url} 매핑 파일 생성
+    data/kakao_photos.json — {bakery_id: photo_url} 매핑 파일 생성
 """
 
 import io
@@ -195,7 +195,7 @@ def main():
         print(".env 파일에 KAKAO_REST_API_KEY=your_key 형태로 추가")
         sys.exit(1)
 
-    output_path = Path(__file__).resolve().parent.parent / "data" / "bakery_photos.json"
+    output_path = Path(__file__).resolve().parent.parent / "data" / "kakao_photos.json"
     output_path.parent.mkdir(exist_ok=True)
 
     # 기존 데이터가 있으면 로드

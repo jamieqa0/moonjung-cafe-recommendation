@@ -176,7 +176,8 @@ header nav a:hover .nav-icon {
 
 body:has(.results-layout) .container,
 body:has(.intro-layout) .container,
-body:has(.sensory-layout) .container {
+body:has(.sensory-layout) .container,
+body:has(.all-bakeries) .container {
     max-width: 1200px;
 }
 
@@ -975,6 +976,22 @@ header nav a:hover::after {
     font-weight: 300;
 }
 
+/* ===== All Bakeries Page ===== */
+.all-bakeries {
+    padding-bottom: var(--space-10);
+}
+
+.all-bakeries-header {
+    margin-bottom: var(--space-6);
+}
+
+.all-bakeries-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
 /* ===== Results Layout (top / left / right) ===== */
 .results {
     padding-bottom: 2rem;
@@ -999,6 +1016,13 @@ header nav a:hover::after {
     grid-template-rows: auto 1fr;
     gap: var(--space-6);
     align-items: start;
+}
+
+.results-layout--no-map {
+    grid-template-areas:
+        "top"
+        "right";
+    grid-template-columns: 1fr;
 }
 
 .results-top {
@@ -1243,22 +1267,22 @@ header nav a:hover::after {
 /* Card header with illustration */
 .card-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-3);
     margin-bottom: var(--space-2);
 }
 
 .card-illust {
-    width: 72px;
-    height: 72px;
+    width: 108px;
+    height: 108px;
     flex-shrink: 0;
     opacity: 0.9;
     cursor: pointer;
 }
 
 .card-photo {
-    width: 72px;
-    height: 72px;
+    width: 108px;
+    height: 108px;
     flex-shrink: 0;
     object-fit: cover;
     border-radius: var(--radius-sm);
@@ -1267,6 +1291,13 @@ header nav a:hover::after {
 
 .card-header-text {
     min-width: 0;
+    flex: 1;
+}
+
+.card-header-text .description,
+.card-header-text .card-signature-menu {
+    margin-top: var(--space-1);
+    margin-bottom: 0;
 }
 
 .cafe-card h3 {
@@ -1321,6 +1352,10 @@ header nav a:hover::after {
     font-size: var(--text-sm);
     font-weight: 300;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .cafe-card .description {
@@ -1357,11 +1392,44 @@ header nav a:hover::after {
     text-transform: uppercase;
 }
 
-.cafe-card .extra-info {
-    color: var(--ink-muted);
+.card-meta {
     font-size: var(--text-sm);
-    font-weight: 300;
+    color: var(--ink-muted);
     margin: var(--space-1) 0;
+}
+
+.info-tags {
+    display: flex;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+    margin: var(--space-1) 0;
+}
+
+.info-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.info-tag--parking {
+    background: rgba(91, 147, 91, 0.12);
+    color: #3d7a3d;
+    border: 1px solid rgba(91, 147, 91, 0.3);
+}
+
+.info-tag--no-parking {
+    background: rgba(180, 100, 80, 0.1);
+    color: #a05040;
+    border: 1px solid rgba(180, 100, 80, 0.25);
+}
+
+.info-tag--custom {
+    background: rgba(200, 132, 42, 0.12);
+    color: var(--amber-dark, #9a6215);
+    border: 1px solid rgba(200, 132, 42, 0.3);
 }
 
 .tags {
@@ -1910,6 +1978,14 @@ footer::before {
         max-height: none;
     }
 
+    .all-bakeries-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .all-bakeries-header {
+        text-align: center;
+    }
+
     .results-layout {
         grid-template-areas:
             "top"
@@ -1971,6 +2047,8 @@ footer::before {
 
     header nav {
         justify-content: center;
+        gap: var(--space-4);
+        flex-wrap: wrap;
     }
 
     .intro-welcome-icon {
@@ -1991,7 +2069,8 @@ footer::before {
         padding: var(--space-5);
     }
 
-    .results h2 {
+    .results h2,
+    .all-bakeries-header h2 {
         font-size: var(--text-xl);
     }
 

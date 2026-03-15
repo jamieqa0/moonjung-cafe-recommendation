@@ -18,7 +18,7 @@
                 referrerpolicy="no-referrer"
                 onerror="this.onerror=null;this.src='{{ bakery.image_url }}';this.className='detail-illust';">
             {% else %}
-            <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu }}" class="detail-illust">
+            <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu | join(', ') }}" class="detail-illust">
             {% endif %}
             <div class="detail-header-text">
                 <h2>{{ bakery.name }}</h2>
@@ -38,7 +38,7 @@
         <p class="description">{{ bakery.description }}</p>
 
         <div class="detail-info">
-            <p><img src="/static/icons/bread.svg" alt="" class="label-icon"><strong>대표 메뉴:</strong> {{ bakery.signature_menu }}</p>
+            <p><img src="/static/icons/bread.svg" alt="" class="label-icon"><strong>대표 메뉴:</strong> {{ bakery.signature_menu | map('strip_parens') | join(' · ') }}</p>
             {% if bakery.flavor_profile %}
             <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
             {% endif %}
@@ -124,7 +124,7 @@
                 content: '<div class="map-overlay-wrap">' +
                     '<div class="map-overlay-card">' +
                     '<div class="overlay-name">' + {{ bakery.name | tojson }} + '</div>' +
-                    '<div class="overlay-menu">' + {{ bakery.signature_menu | tojson }} + '</div>' +
+                    '<div class="overlay-menu">' + {{ bakery.signature_menu | join(' · ') | tojson }} + '</div>' +
                     '</div></div>',
                 yAnchor: 1,
                 zIndex: 10

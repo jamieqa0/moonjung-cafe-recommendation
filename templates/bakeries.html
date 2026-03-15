@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}문정동 전체 빵집 - MoonBBang Station{% endblock %}
+
+{% block content %}
+<section class="all-bakeries">
+    <div class="all-bakeries-header">
+        <h2><img src="/static/icons/telescope.svg" alt="" class="heading-icon">문정동의 모든 빵집</h2>
+        <p class="results-summary">총 {{ bakeries|length }}곳 · 문정역 기준 거리순</p>
+    </div>
+
+    <div class="all-bakeries-grid">
+        {% for bakery in bakeries %}
+        <article class="cafe-card">
+            <div class="card-header">
+                {% if bakery.photo_url %}
+                <img src="{{ bakery.photo_url }}" alt="{{ bakery.name }}" class="card-photo"
+                    referrerpolicy="no-referrer"
+                    onerror="this.onerror=null;this.src='{{ bakery.image_url }}';this.className='card-illust';">
+                {% else %}
+                <img src="{{ bakery.image_url }}" alt="{{ bakery.signature_menu | join(', ') }}" class="card-illust">
+                {% endif %}
+                <div class="card-header-text">
+                    <h3>{{ bakery.name }}</h3>
+                    <div class="address-row">
+                        <a href="https://search.naver.com/search.naver?query={{ bakery.name | urlencode }}" target="_blank"
+                            rel="noopener" class="naver-link" title="네이버에서 검색">N</a>
+                        {% if bakery.kakao_id %}
+                        <a href="https://place.map.kakao.com/{{ bakery.kakao_id }}" target="_blank"
+                            rel="noopener" class="kakao-link" title="카카오맵에서 보기">K</a>
+                        {% else %}
+                        <a href="https://map.kakao.com/link/search/{{ bakery.address | urlencode }}" target="_blank"
+                            rel="noopener" class="kakao-link" title="카카오맵에서 보기">K</a>
+                        {% endif %}
+                        <span class="address">{{ bakery.address }}</span>
+                    </div>
+                </div>
+            </div>
+            <p><strong>대표 메뉴:</strong> {{ bakery.signature_menu | map('strip_parens') | join(' · ') }} &nbsp;·&nbsp;
+               <strong>거리:</strong> {{ (bakery.distance * 1000) | int }}m</p>
+            <p class="extra-info">
+                {{ bakery.price_range }}
+                · {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
+                · {% if bakery.custom_order %}주문제작 가능{% else %}주문제작 불가{% endif %}
+            </p>
+            <div class="tags">
+                {% for tag in bakery.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <a href="/" class="back-link"><img src="/static/icons/rocket.svg" alt="" class="link-icon">추천받으러 가기</a>
+</section>
+{% endblock %}
+
+<script type="module">
+    import { animate, hover } from "https://cdn.jsdelivr.net/npm/motion@12.34.0/+esm"
+
+    document.querySelectorAll('.card-photo, .card-illust').forEach(el => {
+        hover(el, (element) => {
+            animate(element, { scale: 1.2, rotate: 3 }, { type: "spring", stiffness: 300, damping: 15 })
+            return () => animate(element, { scale: 1, rotate: 0 }, { type: "spring", stiffness: 300, damping: 20 })
+        })
+    })
+</script>

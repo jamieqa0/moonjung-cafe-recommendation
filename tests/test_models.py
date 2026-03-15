@@ -12,7 +12,7 @@ class TestBakery:
             address="문정동 100",
             mood=["아늑한"],
             purpose=["브런치"],
-            signature_menu="소금빵",
+            signature_menu=["소금빵"],
             price_range="일반",
 
             description="테스트용 베이커리",
@@ -28,7 +28,7 @@ class TestBakery:
             address="문정동 100",
             mood=["아늑한"],
             purpose=["브런치"],
-            signature_menu="소금빵",
+            signature_menu=["소금빵"],
             price_range="일반",
 
             description="테스트용",
