@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 의존성 구조
 
-- **`requirements.txt`** — 프로덕션(Render) 배포용. `kiwipiepy`, `playwright`, `pytest` 계열 제외
+- **`requirements.txt`** — 프로덕션(Render) 배포용. `kiwipiepy`, `playwright`, `pytest` 계열 제외 (메모리 용량 문제)
 - **`requirements-dev.txt`** — 로컬 개발용 (`-r requirements.txt` 포함 + 테스트/스크래핑 도구)
 
 > **kiwipiepy 제거 이유**: Render 무료 플랜 메모리(512MB) 초과로 OOM 발생.
@@ -92,6 +92,7 @@ python -m pytest tests/test_recommender.py::TestRecommendBasicFilter::test_filte
 | GET | `/bakeries` | 전체 빵집 목록 — 거리순 정렬 (HTML) |
 | GET | `/sensory` | 감각 기반 추천 폼 (HTML) |
 | POST | `/sensory` | 감각 폼 제출 → 결과 페이지 (HTML) |
+| GET | `/overview` | 시스템 개요 페이지 (HTML) |
 | GET | `/api/bakeries` | 전체 베이커리 목록 (JSON) |
 | GET | `/api/bakeries/{id}` | 단일 베이커리 조회 (JSON) |
 | POST | `/api/recommend` | 추천 요청 (JSON) |

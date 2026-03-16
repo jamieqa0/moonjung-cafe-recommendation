@@ -401,6 +401,18 @@ def _load_descriptions() -> dict[str, str]:
         return {}
 
 
+def _load_flavor_profiles() -> dict[str, str]:
+    """data/flavor_profiles.json에서 LLM이 생성한 맛 프로필을 로드한다."""
+    json_path = os.path.join(os.path.dirname(__file__), "..", "data", "flavor_profiles.json")
+    if not os.path.exists(json_path):
+        return {}
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
 def _load_public_bakeries() -> list[dict]:
     """서울 열린데이터광장 CSV 데이터를 로드한다.
 
@@ -535,11 +547,11 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
             "price_range": "일반",
             "custom_order": True,
         }
-    elif any(k in name_lower for k in ["마카롱", "타르트", "소림사"]):
+    elif any(k in name_lower for k in ["마카롱", "카롱", "타르트", "소림사"]):
         result = {
             "mood": ["감성적인"],
             "purpose": ["선물"],
-            "signature_menu": ["마카롱"] if any(k in name_lower for k in ["마카롱", "소림사"]) else ["타르트"],
+            "signature_menu": ["마카롱"] if any(k in name_lower for k in ["마카롱", "카롱", "소림사"]) else ["타르트"],
             "price_range": "일반",
             "custom_order": None,
         }
@@ -548,6 +560,14 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
             "mood": ["모던한"],
             "purpose": ["브런치"],
             "signature_menu": ["크루아상"],
+            "price_range": "일반",
+            "custom_order": None,
+        }
+    elif any(k in name_lower for k in ["프레즐", "pretzel"]):
+        result = {
+            "mood": ["편안한"],
+            "purpose": ["브런치", "선물"],
+            "signature_menu": ["프레즐"],
             "price_range": "일반",
             "custom_order": None,
         }
@@ -578,7 +598,7 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
     elif any(k in name_lower for k in ["호두", "붕어빵", "꽈배기"]):
         result = {
             "mood": ["편안한"],
-            "purpose": [],
+            "purpose": ["선물"],
             "signature_menu": [],
             "price_range": "일반",
             "custom_order": None,
@@ -586,7 +606,7 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
     elif "외계인방앗간" in name_lower:
         result = {
             "mood": ["아늑한", "동네 단골"],
-            "purpose": [],
+            "purpose": ["선물"],
             "signature_menu": ["쌀빵"],
             "price_range": "일반",
             "custom_order": None,
@@ -645,7 +665,7 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
             # 리뷰 없음: 보수적 최소 기본값
             result = {
                 "mood": ["아늑한"],
-                "purpose": [],
+                "purpose": ["선물"],
                 "signature_menu": [],
                 "price_range": "일반",
                 "custom_order": None,
@@ -670,9 +690,10 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
         # purpose 추론
         if any(k in rt for k in ["선물", "포장", "선물용"]):
             purpose_set.add("선물")
-        if any(k in rt for k in ["케이크", "생일 케이크", "주문 제작", "주문제작"]):
+        if any(k in rt for k in ["케이크", "생일 케이크", "주문 제작", "주문제작", "맞춤"]):
             purpose_set.add("케이크")
-        if any(k in rt for k in ["브런치", "아침", "토스트", "샌드위치", "점심식사"]):
+            purpose_set.add("선물")
+        if any(k in rt for k in ["브런치", "아침", "토스트", "샌드위치", "점심식사", "베이글"]):
             purpose_set.add("브런치")
         if any(k in rt for k in ["바게트", "캄파뉴", "통밀", "호밀", "발효빵", "식사빵"]):
             purpose_set.add("식사빵")
@@ -680,6 +701,8 @@ def _infer_attributes(name: str, category: str, reviews: list[str] | None = None
             mood_set.add("동네 단골")
         if any(k in rt for k in ["모임", "파티", "단체"]):
             purpose_set.add("모임")
+        if any(k in rt for k in ["쿠키", "마카롱", "다쿠아즈", "디저트"]):
+            purpose_set.add("선물")
 
         result["mood"] = list(mood_set)
         result["purpose"] = list(purpose_set)
@@ -704,14 +727,19 @@ def _load_place_details() -> dict[str, dict]:
         return {}
 
 
+_MENU_SKIP_LABELS = {"대표", "인기", "new", "신메뉴", "추천", "베스트", "hot", "best", "sale"}
+
+
 def _pick_menus(menus: list[str], n: int = 3) -> list[str]:
     """메뉴 리스트에서 음료를 제외한 대표 메뉴명 최대 n개를 반환한다."""
     import re
     result = []
     for menu in menus:
         name = re.sub(r"\s*[\d,]+원.*$", "", menu).strip()
-        if name:
-            result.append(name)
+        name = re.sub(r"\[.*?\]", "", name).strip()
+        if not name or name.lower() in _MENU_SKIP_LABELS:
+            continue
+        result.append(name)
         if len(result) >= n:
             break
     return result
@@ -811,6 +839,7 @@ def _build_bakeries() -> list[Bakery]:
     photos = _load_bakery_photos()
     place_details = _load_place_details()
     descriptions = _load_descriptions()
+    flavor_profiles = _load_flavor_profiles()
 
     # 1. 시드 데이터: 카카오 스크래핑 데이터 우선, 없으면 빈 값
     for raw in _RAW_BAKERIES:
@@ -828,8 +857,10 @@ def _build_bakeries() -> list[Bakery]:
         bread_menus = [m for m in real_menus if not any(k in m for k in _DRINK_KEYWORDS)]
         signature_menu = _pick_menus(bread_menus) if bread_menus else []
 
-        # mood/purpose: 이름 + 실제 리뷰 기반 추론
+        # mood/purpose: 이름 + 실제 리뷰 기반 추론 (시드 데이터와 합산)
         attrs = _infer_attributes(raw["name"], "", real_reviews)
+        attrs["mood"] = list(set(raw.get("mood", [])) | set(attrs["mood"]))
+        attrs["purpose"] = list(set(raw.get("purpose", [])) | set(attrs["purpose"]))
 
         # 리뷰 3개 이상이면 min_reviews=2 — 키워드가 2개 이상 리뷰에 등장해야 태그 부여
         min_r = 2 if len(real_reviews) >= 3 else 1
@@ -852,8 +883,8 @@ def _build_bakeries() -> list[Bakery]:
             address=raw["address"],
             mood=attrs["mood"],
             purpose=attrs["purpose"],
-            signature_menu=signature_menu,
-            flavor_profile=raw.get("flavor_profile", ""),
+            signature_menu=signature_menu or raw.get("signature_menu", []),
+            flavor_profile=flavor_profiles.get(raw["name"]) or raw.get("flavor_profile", ""),
             price_range=raw["price_range"],
             description=description,
             parking=raw.get("parking"),
@@ -876,6 +907,7 @@ def _build_bakeries() -> list[Bakery]:
         if raw["name"] in seen_names:
             continue
         raw["description"] = descriptions.get(raw["name"], "")
+        raw["flavor_profile"] = flavor_profiles.get(raw["name"], "")
         min_r = 2 if len(raw["reviews"]) >= 3 else 1
         tags = extract_tags(raw["reviews"], min_reviews=min_r)
         if not tags:
@@ -890,6 +922,7 @@ def _build_bakeries() -> list[Bakery]:
         if raw["name"] in seen_names:
             continue
         raw["description"] = descriptions.get(raw["name"], "")
+        raw["flavor_profile"] = flavor_profiles.get(raw["name"], "")
         min_r = 2 if len(raw["reviews"]) >= 3 else 1
         tags = extract_tags(raw["reviews"], min_reviews=min_r)
         if not tags:

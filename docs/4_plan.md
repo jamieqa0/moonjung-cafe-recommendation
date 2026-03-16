@@ -275,4 +275,6 @@ scrape_naver_details.py → data/naver_details.json
 
 ### 버그 리포트
 
-- 추가예정
+1. http://localhost:8000/api/bakeries/ 보면 purpose랑 flavor_profile 비어 있는 데이터가 많아. 
+2. mode, purpose 가 리뷰를 기반으로 추출한것으로 아는데,  확인해줘
+3. flavor_profile는 상호명과, 거리와 리뷰 기반으로 추론해서 작성해주기로 했는데 확인해줘ㅍ

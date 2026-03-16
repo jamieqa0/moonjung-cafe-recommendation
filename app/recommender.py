@@ -30,9 +30,10 @@ def recommend(
     for bakery in filtered:
         score = 0.0
 
-        if mood and mood in bakery.mood:
+        if mood and (mood in bakery.mood or mood in bakery.tags):
             score += 2
-        if purpose and (purpose in bakery.purpose or purpose in bakery.tags):
+        if purpose and (purpose in bakery.purpose or purpose in bakery.tags
+                        or any(purpose in tag for tag in bakery.tags)):
             score += 2
         if price_range and bakery.price_range == price_range:
             score += 1

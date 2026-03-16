@@ -61,14 +61,14 @@
                             </div>
                             <p class="description">{{ bakery.description }}</p>
                             <p class="card-signature-menu"><strong>대표 메뉴:</strong> {{ bakery.signature_menu |
-                                map('strip_parens') | join(' · ') }}</p>
+                                map('strip_parens') | join(' · ') or '다양한 빵' }}</p>
                         </div>
                     </div>
                     {% if bakery.flavor_profile %}
                     <p class="flavor-profile">{{ bakery.flavor_profile }}</p>
                     {% endif %}
-                    <p class="card-meta"><strong>가격대:</strong> {{ bakery.price_range }} · <strong>문정역에서:</strong> {{
-                        (bakery.distance * 1000) | int }}m{% if bakery.parking == true %} <span
+                    <p class="card-meta"><strong>가격대:</strong> {{ bakery.price_range }} · <strong>문정역에서:</strong> {% if bakery.distance > 0 %}{{
+                        (bakery.distance * 1000) | int }}m{% else %}거리 미확인{% endif %}{% if bakery.parking == true %} <span
                             class="info-tag info-tag--parking">주차가능</span>{% elif bakery.parking == false %} <span
                             class="info-tag info-tag--no-parking">주차불가</span>{% endif %}{% if bakery.custom_order %}
                         <span class="info-tag info-tag--custom">주문제작가능</span>{% endif %}

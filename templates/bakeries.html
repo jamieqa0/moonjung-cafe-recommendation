@@ -36,8 +36,8 @@
                     </div>
                 </div>
             </div>
-            <p><strong>대표 메뉴:</strong> {{ bakery.signature_menu | map('strip_parens') | join(' · ') }} &nbsp;·&nbsp;
-               <strong>거리:</strong> {{ (bakery.distance * 1000) | int }}m</p>
+            <p><strong>대표 메뉴:</strong> {{ bakery.signature_menu | map('strip_parens') | join(' · ') or '다양한 빵' }} &nbsp;·&nbsp;
+               <strong>거리:</strong> {% if bakery.distance > 0 %}{{ (bakery.distance * 1000) | int }}m{% else %}거리 미확인{% endif %}</p>
             <p class="extra-info">
                 {{ bakery.price_range }}
                 · {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
