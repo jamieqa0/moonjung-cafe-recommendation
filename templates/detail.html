@@ -44,8 +44,8 @@
             {% endif %}
             <p><strong>가격대:</strong> {{ bakery.price_range }} · <strong>문정역에서:</strong> {% if bakery.distance > 0 %}{{ (bakery.distance * 1000) | int }}m{% else %}거리 미확인{% endif %}</p>
             <p class="extra-info">
-                {% if bakery.parking %}주차 가능{% else %}주차 불가{% endif %}
-                · {% if bakery.custom_order %}주문제작 가능{% else %}주문제작 불가{% endif %}
+                {% if bakery.parking == true %}주차 가능{% elif bakery.parking == false %}주차 불가{% else %}주차 미확인{% endif %}
+                · {% if bakery.custom_order == true %}주문제작 가능{% elif bakery.custom_order == false %}주문제작 불가{% else %}주문제작 미확인{% endif %}
             </p>
         </div>
 
