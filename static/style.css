@@ -734,7 +734,12 @@ header nav a:hover::after {
 .checkbox-label:hover {
     background: var(--amber-glow);
     box-shadow: var(--shadow-sm);
-    transform: translateX(4px);
+}
+
+@media (hover: hover) {
+    .checkbox-label:hover {
+        transform: translateX(4px);
+    }
 }
 
 .checkbox-label input[type="checkbox"] {
